@@ -16,6 +16,9 @@
         [Required]
         public decimal Price { get; set; }
 
+        [Required]
+        public string ImageUrl { get; set; }
+
         public ProductType Type { get; set; }
 
         [Required]

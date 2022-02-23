@@ -11,7 +11,7 @@
 
         public const int RecipeTitleMinLength = 5;
         public const int RecipeTitleMaxLength = 30;
-        public const int RecipeTitleDescriptionMinLength = 20;
+        public const int RecipeDescriptionMinLength = 20;
 
         public const int SportNameMinLength = 3;
         public const int SportNameMaxLength = 20;

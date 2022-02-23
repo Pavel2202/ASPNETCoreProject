@@ -17,6 +17,9 @@
         public string Description { get; set; }
 
         [Required]
+        public string ImageUrl { get; set; }
+
+        [Required]
         public string CreatorId { get; set; }
 
         public User Creator{ get; set; }
