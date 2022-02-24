@@ -3,6 +3,7 @@
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Recipes;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -15,18 +16,25 @@
             this.context = context;
         }
 
-        public IEnumerable<RecipeListingViewModel> AllRecipes(string searchTerm)
+        public IEnumerable<RecipeListingViewModel> AllRecipes(AllRecipesQueryModel query)
         {
             var recipesQuery = context.Recipes.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 recipesQuery = recipesQuery.Where(r => 
-                    r.Title.ToLower().Contains(searchTerm.ToLower()));
+                    r.Title.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
+            recipesQuery = query.Sorting switch
+            {
+                RecipeSorting.Title => recipesQuery.OrderByDescending(r => r.Title),
+                RecipeSorting.DateCreated or _ => recipesQuery.OrderByDescending(r => r.Id)
+            };
+
             var recipes = recipesQuery
-                .OrderByDescending(r => r.Id)
+                .Skip((query.CurrentPage - 1) * AllRecipesQueryModel.RecipesPerPage)
+                .Take(AllRecipesQueryModel.RecipesPerPage)
                 .Select(r => new RecipeListingViewModel
                 {
                     Id = r.Id,
@@ -51,5 +59,8 @@
 
             context.SaveChanges();
         }
+
+        public int TotalRecipes()
+            => context.Recipes.Count();
     }
 }

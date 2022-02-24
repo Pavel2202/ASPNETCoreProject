@@ -5,8 +5,10 @@
 
     public interface IRecipeService
     {
-        IEnumerable<RecipeListingViewModel> AllRecipes(string searchTerm);
+        IEnumerable<RecipeListingViewModel> AllRecipes(AllRecipesQueryModel query);
 
         void CreateRecipe(RecipeFormModel recipe, string userId);
+
+        int TotalRecipes();
     }
 }

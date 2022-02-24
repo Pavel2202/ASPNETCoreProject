@@ -15,14 +15,19 @@
             this.service = service;
         }
 
-        public IActionResult All(string searchTerm)
+        public IActionResult All([FromQuery] AllRecipesQueryModel query)
         {
-            var recipes = service.AllRecipes(searchTerm);
+            var recipes = service.AllRecipes(query);
+
+            var totalRecipes = service.TotalRecipes();
 
             return this.View(new AllRecipesQueryModel
             {
                 Recipes = recipes,
-                SearchTerm = searchTerm
+                SearchTerm = query.SearchTerm,
+                CurrentPage = query.CurrentPage,
+                TotalRecipes = totalRecipes,
+                Sorting = query.Sorting
             });
         }
 
