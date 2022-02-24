@@ -1,11 +1,17 @@
 ﻿namespace FitnessSite.Data.Models
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using static DataConstants;
 
     public class Trainer
     {
+        public Trainer()
+        {
+            this.Customers = new List<User>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -31,5 +37,7 @@
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        public ICollection<User> Customers { get; set; }
     }
 }

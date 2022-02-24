@@ -2,7 +2,7 @@
 
 namespace FitnessSite.Data.Migrations
 {
-    public partial class CreateTables : Migration
+    public partial class CreateTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,6 +12,12 @@ namespace FitnessSite.Data.Migrations
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "TrainerId",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Carts",
@@ -122,6 +128,11 @@ namespace FitnessSite.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TrainerId",
+                table: "AspNetUsers",
+                column: "TrainerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CartId",
                 table: "Products",
                 column: "CartId");
@@ -148,12 +159,24 @@ namespace FitnessSite.Data.Migrations
                 principalTable: "Carts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Trainers_TrainerId",
+                table: "AspNetUsers",
+                column: "TrainerId",
+                principalTable: "Trainers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_Carts_CartId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Trainers_TrainerId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
@@ -175,8 +198,16 @@ namespace FitnessSite.Data.Migrations
                 name: "IX_AspNetUsers_CartId",
                 table: "AspNetUsers");
 
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_TrainerId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropColumn(
                 name: "CartId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "TrainerId",
                 table: "AspNetUsers");
         }
     }

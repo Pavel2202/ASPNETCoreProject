@@ -4,6 +4,7 @@
     using FitnessSite.Services.Recipes;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Security.Claims;
 
     public class RecipesController : Controller
     {
@@ -29,7 +30,16 @@
         [Authorize]
         public IActionResult Add(AddRecipeFormModel recipe)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return this.View(recipe);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            service.CreateRecipe(recipe, userId);
+
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

@@ -7,16 +7,19 @@
     public class AddRecipeFormModel
     {
         [Required]
-        [MinLength(RecipeTitleMinLength)]
-        [MaxLength(RecipeTitleMaxLength)]
+        [StringLength(RecipeTitleMaxLength, MinimumLength = RecipeTitleMinLength)]
         public string Title { get; set; }
 
         [Required]
         [Display(Name = "Image URL")]
+        [Url]
         public string ImageUrl { get; set; }
 
         [Required]
-        [MinLength(RecipeDescriptionMinLength)]
+        [StringLength(
+            int.MaxValue,
+            MinimumLength = RecipeDescriptionMinLength,
+            ErrorMessage = "The field Description must be a string with a minimum length of {2}.")]
         public string Description { get; set; }
     }
 }

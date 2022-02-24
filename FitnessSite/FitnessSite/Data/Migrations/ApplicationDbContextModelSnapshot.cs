@@ -210,6 +210,9 @@ namespace FitnessSite.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TrainerId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -229,6 +232,8 @@ namespace FitnessSite.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("TrainerId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -415,6 +420,10 @@ namespace FitnessSite.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FitnessSite.Data.Models.Trainer", null)
+                        .WithMany("Customers")
+                        .HasForeignKey("TrainerId");
+
                     b.Navigation("Cart");
                 });
 
@@ -474,6 +483,11 @@ namespace FitnessSite.Data.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FitnessSite.Data.Models.Trainer", b =>
+                {
+                    b.Navigation("Customers");
                 });
 #pragma warning restore 612, 618
         }
