@@ -15,11 +15,15 @@
             this.service = service;
         }
 
-        public IActionResult All()
+        public IActionResult All(string searchTerm)
         {
-            var recipes = service.AllRecipes();
+            var recipes = service.AllRecipes(searchTerm);
 
-            return this.View(recipes);
+            return this.View(new AllRecipesQueryModel
+            {
+                Recipes = recipes,
+                SearchTerm = searchTerm
+            });
         }
 
         [Authorize]
@@ -39,7 +43,7 @@
 
             service.CreateRecipe(recipe, userId);
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("All", "Recipes");
         }
     }
 }

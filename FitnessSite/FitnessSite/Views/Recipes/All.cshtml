@@ -1,13 +1,35 @@
-﻿@model IEnumerable<RecipeListingViewModel>
+﻿@model AllRecipesQueryModel
+
+@{
+    ViewData["Title"] = "All Recipes";
+}
+
+<h2 class="heading-margin text-center">All Recipes</h2>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Rice, Eggs, etc."/>
+            </div>
+        </div>
+     </div>
+</form>
+
+<a asp-controller="Recipes" asp-action="Add" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">Add Recipe</a>
+<a asp-controller="Recipes" asp-action="Mine" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">My Recipes</a>
 
 <div class="row">
-@foreach (var recipe in Model)
+@foreach (var recipe in Model.Recipes)
 {
-    <div class="card">
-        <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
-        <div class="card-body">
-        <h5 class="card-title">@recipe.Title</h5>
-            <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">Read more</a>
+    <div class="col-md-4" style="width: 18rem;">
+        <div class="card mb-3">
+            <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
+            <div class="card-body">
+                <h5 class="card-title">@recipe.Title</h5>
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">Read more</a>
+            </div>
         </div>
     </div>
 }

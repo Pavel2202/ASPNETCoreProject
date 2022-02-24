@@ -5,7 +5,7 @@
 
     public interface IRecipeService
     {
-        IEnumerable<RecipeListingViewModel> AllRecipes();
+        IEnumerable<RecipeListingViewModel> AllRecipes(string searchTerm);
 
         void CreateRecipe(RecipeFormModel recipe, string userId);
     }

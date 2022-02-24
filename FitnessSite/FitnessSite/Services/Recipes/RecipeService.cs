@@ -15,16 +15,27 @@
             this.context = context;
         }
 
-        public IEnumerable<RecipeListingViewModel> AllRecipes()
-            => context.Recipes
+        public IEnumerable<RecipeListingViewModel> AllRecipes(string searchTerm)
+        {
+            var recipesQuery = context.Recipes.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                recipesQuery = recipesQuery.Where(r => 
+                    r.Title.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var recipes = recipesQuery
+                .OrderByDescending(r => r.Id)
                 .Select(r => new RecipeListingViewModel
                 {
                     Id = r.Id,
                     Title = r.Title,
                     ImageUrl = r.ImageUrl
-                })
-                .OrderByDescending(r => r.Id)
-            .ToList();
+                }).ToList();
+
+            return recipes;
+        }
 
         public void CreateRecipe(RecipeFormModel model, string userId)
         {
