@@ -4,7 +4,7 @@
 
     using static Data.DataConstants;
 
-    public class AddRecipeFormModel
+    public class RecipeFormModel
     {
         [Required]
         [StringLength(RecipeTitleMaxLength, MinimumLength = RecipeTitleMinLength)]

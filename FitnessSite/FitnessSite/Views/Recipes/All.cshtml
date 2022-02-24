@@ -1,0 +1,14 @@
+﻿@model IEnumerable<RecipeListingViewModel>
+
+<div class="row">
+@foreach (var recipe in Model)
+{
+    <div class="card">
+        <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
+        <div class="card-body">
+        <h5 class="card-title">@recipe.Title</h5>
+            <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">Read more</a>
+        </div>
+    </div>
+}
+</div>

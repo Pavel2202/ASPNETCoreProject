@@ -17,18 +17,18 @@
 
         public IActionResult All()
         {
-            return this.View();
+            var recipes = service.AllRecipes();
+
+            return this.View(recipes);
         }
 
         [Authorize]
         public IActionResult Add()
-        {
-            return this.View();
-        }
+            => this.View();
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddRecipeFormModel recipe)
+        public IActionResult Add(RecipeFormModel recipe)
         {
             if (!ModelState.IsValid)
             {

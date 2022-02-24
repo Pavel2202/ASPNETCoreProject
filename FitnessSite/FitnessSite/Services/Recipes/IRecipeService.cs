@@ -1,9 +1,12 @@
 ﻿namespace FitnessSite.Services.Recipes
 {
     using FitnessSite.Models.Recipes;
+    using System.Collections.Generic;
 
     public interface IRecipeService
     {
-        void CreateRecipe(AddRecipeFormModel recipe, string userId);
+        IEnumerable<RecipeListingViewModel> AllRecipes();
+
+        void CreateRecipe(RecipeFormModel recipe, string userId);
     }
 }
