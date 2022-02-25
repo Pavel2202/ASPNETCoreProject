@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MyRecipesViewModel>
+
+@{
+    ViewData["Title"] = "My Recipes";
+}
+
+<h2 class="heading-margin text-center">My Recipes</h2>
+
+<div class="row">
+@foreach (var recipe in Model)
+{
+    <div class="col-md-4" style="width: 18rem;">
+        <div class="card mb-3">
+            <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
+            <div class="card-body">
+                <h5 class="card-title">@recipe.Title</h5>
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary mr-3">Read more</a>
+                    <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@recipe.Id" class="btn btn-primary mr-3">Edit</a>
+                    <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@recipe.Id" class="btn btn-primary">Delete</a>
+            </div>
+        </div>
+    </div>
+}
+</div>

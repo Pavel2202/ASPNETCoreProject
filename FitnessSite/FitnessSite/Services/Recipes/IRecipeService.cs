@@ -10,5 +10,9 @@
         void CreateRecipe(RecipeFormModel recipe, string userId);
 
         int TotalRecipes();
+
+        DetailsViewModel GetRecipe(int recipeId);
+
+        IEnumerable<MyRecipesViewModel> MyRecipes(string userId);
     }
 }

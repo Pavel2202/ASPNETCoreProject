@@ -22,7 +22,7 @@
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                recipesQuery = recipesQuery.Where(r => 
+                recipesQuery = recipesQuery.Where(r =>
                     r.Title.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
@@ -59,6 +59,35 @@
 
             context.SaveChanges();
         }
+
+        public DetailsViewModel GetRecipe(int recipeId)
+        {
+            var recipe = context.Recipes
+                .FirstOrDefault(r => r.Id == recipeId);
+
+            var creator = context.Users.FirstOrDefault(u => u.Id == recipe.CreatorId);
+            var username = creator.UserName.Split("@").ToArray().First();
+
+            var result = new DetailsViewModel
+            {
+                Title = recipe.Title,
+                ImageUrl = recipe.ImageUrl,
+                Description = recipe.Description,
+                Creator = username
+            };
+
+            return result;
+        }
+
+        public IEnumerable<MyRecipesViewModel> MyRecipes(string userId)
+            => context.Recipes
+                .Where(r => r.CreatorId == userId)
+                .Select(r => new MyRecipesViewModel
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    ImageUrl = r.ImageUrl
+                }).ToList();
 
         public int TotalRecipes()
             => context.Recipes.Count();

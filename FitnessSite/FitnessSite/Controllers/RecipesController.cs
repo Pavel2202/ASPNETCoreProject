@@ -31,6 +31,23 @@
             });
         }
 
+        public IActionResult Details(int id)
+        {
+            var recipe = service.GetRecipe(id);
+
+            return this.View(recipe);
+        }
+
+        [Authorize]
+        public IActionResult Mine()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var recipes = service.MyRecipes(userId);
+
+            return this.View(recipes);
+        }
+
         [Authorize]
         public IActionResult Add()
             => this.View();
