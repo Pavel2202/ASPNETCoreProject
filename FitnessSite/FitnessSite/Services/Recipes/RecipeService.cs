@@ -60,6 +60,46 @@
             context.SaveChanges();
         }
 
+        public void Delete(int recipeId)
+        {
+            var recipe = context.Recipes
+                .FirstOrDefault(r => r.Id == recipeId);
+
+            context.Recipes.Remove(recipe);
+            context.SaveChanges();
+        }
+
+        public bool Edit(int id, RecipeFormModel model)
+        {
+            var recipe = context.Recipes
+                .FirstOrDefault(r => r.Id == id);
+
+            if (recipe == null)
+            {
+                return false;
+            }
+
+            recipe.Title = model.Title;
+            recipe.Description = model.Description;
+            recipe.ImageUrl = model.ImageUrl;
+
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public RecipeFormModel EditConvert(DetailsViewModel recipe)
+        {
+            var model = new RecipeFormModel
+            {
+                Title = recipe.Title,
+                ImageUrl = recipe.ImageUrl,
+                Description = recipe.Description
+            };
+
+            return model;
+        }
+
         public DetailsViewModel GetRecipe(int recipeId)
         {
             var recipe = context.Recipes
@@ -70,6 +110,7 @@
 
             var result = new DetailsViewModel
             {
+                Id = recipe.Id,
                 Title = recipe.Title,
                 ImageUrl = recipe.ImageUrl,
                 Description = recipe.Description,
@@ -77,6 +118,19 @@
             };
 
             return result;
+        }
+
+        public bool IsCreatorOfRecipe(int recipeId, string userId)
+        {
+            var recipe = context.Recipes
+                .FirstOrDefault(r => r.Id == recipeId);
+
+            if (recipe.CreatorId == userId)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<MyRecipesViewModel> MyRecipes(string userId)

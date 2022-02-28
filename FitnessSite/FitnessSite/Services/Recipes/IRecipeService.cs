@@ -14,5 +14,13 @@
         DetailsViewModel GetRecipe(int recipeId);
 
         IEnumerable<MyRecipesViewModel> MyRecipes(string userId);
+
+        bool IsCreatorOfRecipe(int recipeId, string userId);
+
+        bool Edit(int id, RecipeFormModel model);
+
+        RecipeFormModel EditConvert(DetailsViewModel recipe);
+
+        void Delete(int recipeId);
     }
 }

@@ -67,5 +67,58 @@
 
             return this.RedirectToAction("All", "Recipes");
         }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!service.IsCreatorOfRecipe(id, userId))
+            {
+                return Unauthorized();
+            }
+
+            var recipe = service.GetRecipe(id);
+
+            var model = service.EditConvert(recipe);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, RecipeFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edited = service.Edit(id, model);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            var recipe = service.GetRecipe(id);
+
+            return RedirectToAction("Details", new { id });
+        }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!service.IsCreatorOfRecipe(id, userId))
+            {
+                return Unauthorized();
+            }
+
+            service.Delete(id);
+
+            return this.RedirectToAction("Mine", "Recipes");
+        }
     }
 }
