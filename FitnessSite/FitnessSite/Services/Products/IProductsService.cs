@@ -14,5 +14,11 @@
         IEnumerable<string> AllTypes();
 
         ProductDetailsViewModel GetProduct(int id);
+
+        ProductFormModel EditConvert(ProductDetailsViewModel product);
+
+        bool Edit(int id, ProductFormModel model);
+
+        void Delete(int id);
     }
 }

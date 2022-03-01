@@ -65,6 +65,11 @@
             var recipe = context.Recipes
                 .FirstOrDefault(r => r.Id == recipeId);
 
+            if (recipe is null)
+            {
+                return;
+            }
+
             context.Recipes.Remove(recipe);
             context.SaveChanges();
         }

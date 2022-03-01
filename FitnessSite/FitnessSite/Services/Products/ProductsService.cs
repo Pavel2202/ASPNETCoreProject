@@ -80,6 +80,62 @@
             context.SaveChanges();
         }
 
+        public void Delete(int id)
+        {
+            var product = context.Products
+                .Where(p => p.Id == id).FirstOrDefault();
+
+            if (product is null)
+            {
+                return;
+            }
+
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
+
+        public bool Edit(int id, ProductFormModel model)
+        {
+            var product = context.Products
+                .Where(p => p.Id == id).FirstOrDefault();
+
+            if (product is null)
+            {
+                return false;
+            }
+
+            product.Name = model.Name;
+            product.Price = model.Price;
+            product.ImageUrl = model.ImageUrl;
+            product.Description = model.Description;
+
+            var type = Enum.Parse(typeof(ProductType), model.Type);
+
+            product.Type = (ProductType)type;
+
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public ProductFormModel EditConvert(ProductDetailsViewModel product)
+        {
+            var type = context.Products
+                .Where(t => t.Name == product.Name)
+                .Select(t => t.Type.ToString()).FirstOrDefault();
+
+            var model = new ProductFormModel
+            {
+                Name = product.Name,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                Type = type,
+                Description = product.Description
+            };
+
+            return model;
+        }
+
         public ProductDetailsViewModel GetProduct(int id)
             => context.Products
                 .Where(p => p.Id == id)

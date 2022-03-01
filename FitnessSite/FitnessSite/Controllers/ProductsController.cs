@@ -58,5 +58,43 @@
 
             return this.View(product);
         }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var product = service.GetProduct(id);
+
+            var model = service.EditConvert(product);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, ProductFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edited = service.Edit(id, model);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            var product = service.GetProduct(id);
+
+            return this.RedirectToAction("Details", new { id });
+        }
+
+        public IActionResult Delete(int id)
+        {
+            service.Delete(id);
+
+            return this.RedirectToAction("All", "Products");
+        }
     }
 }
