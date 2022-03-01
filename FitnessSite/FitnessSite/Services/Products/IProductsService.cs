@@ -12,5 +12,7 @@
         int TotalProducts();
 
         IEnumerable<string> AllTypes();
+
+        ProductDetailsViewModel GetProduct(int id);
     }
 }

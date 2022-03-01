@@ -80,6 +80,18 @@
             context.SaveChanges();
         }
 
+        public ProductDetailsViewModel GetProduct(int id)
+            => context.Products
+                .Where(p => p.Id == id)
+                .Select(p => new ProductDetailsViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Description = p.Description
+                }).First();
+
         public int TotalProducts()
             => context.Products.Count();
     }

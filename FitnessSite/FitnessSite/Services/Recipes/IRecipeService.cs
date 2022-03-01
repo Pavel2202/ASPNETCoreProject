@@ -11,7 +11,7 @@
 
         int TotalRecipes();
 
-        DetailsViewModel GetRecipe(int recipeId);
+        RecipeDetailsViewModel GetRecipe(int recipeId);
 
         IEnumerable<MyRecipesViewModel> MyRecipes(string userId);
 
@@ -19,7 +19,7 @@
 
         bool Edit(int id, RecipeFormModel model);
 
-        RecipeFormModel EditConvert(DetailsViewModel recipe);
+        RecipeFormModel EditConvert(RecipeDetailsViewModel recipe);
 
         void Delete(int recipeId);
     }

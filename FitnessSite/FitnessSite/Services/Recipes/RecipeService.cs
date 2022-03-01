@@ -88,7 +88,7 @@
             return true;
         }
 
-        public RecipeFormModel EditConvert(DetailsViewModel recipe)
+        public RecipeFormModel EditConvert(RecipeDetailsViewModel recipe)
         {
             var model = new RecipeFormModel
             {
@@ -100,7 +100,7 @@
             return model;
         }
 
-        public DetailsViewModel GetRecipe(int recipeId)
+        public RecipeDetailsViewModel GetRecipe(int recipeId)
         {
             var recipe = context.Recipes
                 .FirstOrDefault(r => r.Id == recipeId);
@@ -108,7 +108,7 @@
             var creator = context.Users.FirstOrDefault(u => u.Id == recipe.CreatorId);
             var username = creator.UserName.Split("@").ToArray().First();
 
-            var result = new DetailsViewModel
+            var result = new RecipeDetailsViewModel
             {
                 Id = recipe.Id,
                 Title = recipe.Title,

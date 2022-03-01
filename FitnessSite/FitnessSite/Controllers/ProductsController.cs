@@ -48,7 +48,15 @@
 
             service.CreateProduct(model);
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("All", "Products");
+        }
+
+        [Authorize]
+        public IActionResult Details(int id)
+        {
+            var product = service.GetProduct(id);
+
+            return this.View(product);
         }
     }
 }

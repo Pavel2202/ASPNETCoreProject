@@ -1,0 +1,31 @@
+﻿@model ProductDetailsViewModel
+
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<div class="row">
+    <div class="col-md-6 offset-4">
+        <h2>@Model.Name</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <img class="card-img-top mb-3" src="@Model.ImageUrl" alt="@Model.Name">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Price: @Model.Price</h5>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 mb-3">
+        @Model.Description
+    </div>
+</div>
+
+    <a asp-controller="Products" asp-action="AddToCart" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">Add to Cart</a>
