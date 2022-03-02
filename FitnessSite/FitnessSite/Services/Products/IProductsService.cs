@@ -20,5 +20,7 @@
         bool Edit(int id, ProductFormModel model);
 
         void Delete(int id);
+
+        void AddToCart(int productId, string userId);
     }
 }

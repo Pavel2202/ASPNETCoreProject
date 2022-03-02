@@ -90,9 +90,20 @@
             return this.RedirectToAction("Details", new { id });
         }
 
+        [Authorize]
         public IActionResult Delete(int id)
         {
             service.Delete(id);
+
+            return this.RedirectToAction("All", "Products");
+        }
+
+        [Authorize]
+        public IActionResult AddToCart(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            service.AddToCart(id, userId);
 
             return this.RedirectToAction("All", "Products");
         }

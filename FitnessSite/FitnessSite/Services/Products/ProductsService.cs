@@ -16,6 +16,26 @@
             this.context = context;
         }
 
+        public void AddToCart(int productId, string userId)
+        {
+            var user = context.Users
+                .FirstOrDefault(u => u.Id == userId);
+
+            var product = context.Products
+                .FirstOrDefault(p => p.Id == productId);
+
+            var cartId = user.CartId;
+
+            var cart = context.Carts
+                .FirstOrDefault(c => c.Id == cartId);
+
+            cart.Products.Add(product);
+
+            product.CartId = cartId;
+
+            context.SaveChanges();
+        }
+
         public IEnumerable<ProductListingViewModel> AllProducts(AllProductsQueryModel query)
         {
             var productsQuery = context.Products.AsQueryable();
