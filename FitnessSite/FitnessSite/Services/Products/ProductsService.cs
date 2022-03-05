@@ -67,7 +67,8 @@
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    ImageUrl = p.ImageUrl                 
+                    ImageUrl = p.ImageUrl,
+                    Price = p.Price
                 }).ToList();
 
             return products;

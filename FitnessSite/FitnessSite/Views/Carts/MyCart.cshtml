@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProductsViewModel>
+
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4" style="width: 18rem;">
+        <div class="card mb-3">
+            <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name">
+            <div class="card-body">
+                <h5 class="card-title">@product.Name</h5>
+                <h6>Price: @product.Price</h6>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+                    <a asp-controller="Carts" asp-action="Remove" asp-route-id="@product.Id" class="btn btn-danger">Remove</a>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+@{
+    decimal total = 0;
+
+    foreach (var product in Model)
+    {
+        total += product.Price;
+    }
+}
+
+@if (Model.ToList().Count > 0)
+{
+    <div class="row offset-4">
+        <h4>
+            Total: @total
+        </h4>
+    </div>
+
+    <div class="row offset-4">
+        <a asp-controller="Carts" asp-action="Buy" class="btn btn-success mr-3">Buy</a>
+        <a asp-controller="Carts" asp-action="Clear" class="btn btn-danger">Clear</a>
+    </div>
+}
+else
+{
+    <div class="row offset-5">
+        <h4>Your cart is empty.</h4>
+    </div>
+    <div class="row col-md-3 offset-5">
+        <h5>Buy products <a asp-controller="Products" asp-action="All">here.</a></h5>
+    </div>
+}

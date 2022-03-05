@@ -2,6 +2,7 @@ namespace FitnessSite
 {
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
+    using FitnessSite.Services.Carts;
     using FitnessSite.Services.Products;
     using FitnessSite.Services.Recipes;
     using Microsoft.AspNetCore.Builder;
@@ -46,6 +47,7 @@ namespace FitnessSite
 
             services.AddTransient<IRecipeService, RecipeService>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<ICartsService, CartsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

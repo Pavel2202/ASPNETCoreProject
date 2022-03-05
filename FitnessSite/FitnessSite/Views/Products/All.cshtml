@@ -48,6 +48,7 @@
             <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name">
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
+                <h6>Price: @product.Price</h6>
                     <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Read more</a>
                     <a asp-controller="Products" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-primary">Add to Cart</a>
             </div>
