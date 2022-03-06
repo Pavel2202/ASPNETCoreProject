@@ -4,6 +4,7 @@
     {
         DateCreated = 0,
         Title = 1,
-        Type = 2
+        Type = 2,
+        Price = 3
     }
 }

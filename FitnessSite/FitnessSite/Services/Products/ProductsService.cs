@@ -57,6 +57,7 @@
             {
                 ProductSorting.Title => productsQuery.OrderByDescending(p => p.Name),
                 ProductSorting.Type => productsQuery.OrderByDescending(p => p.Type),
+                ProductSorting.Price => productsQuery.OrderByDescending(p => p.Price),
                 ProductSorting.DateCreated or _ => productsQuery.OrderByDescending(p => p.Id)
             };
 
