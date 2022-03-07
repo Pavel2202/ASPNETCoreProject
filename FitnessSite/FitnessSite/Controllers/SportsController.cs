@@ -45,5 +45,42 @@
 
             return this.View(sport);
         }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var sport = service.GetSport(id);
+
+            var model = service.EditConvert(sport);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, SportsFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edited = service.Edit(id, model);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            return this.RedirectToAction("Details", new { id });
+        }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            service.Delete(id);
+
+            return this.RedirectToAction("All", "Sports");
+        }
     }
 }

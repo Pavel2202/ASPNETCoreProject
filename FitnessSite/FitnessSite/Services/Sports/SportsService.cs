@@ -39,6 +39,47 @@
             context.SaveChanges();
         }
 
+        public void Delete(int id)
+        {
+            var sport = context.Sports
+                .FirstOrDefault(s => s.Id == id);
+
+            context.Sports.Remove(sport);
+
+            context.SaveChanges();
+        }
+
+        public bool Edit(int id, SportsFormModel model)
+        {
+            var sport = context.Sports
+                .Where(s => s.Id == id).FirstOrDefault();
+
+            if (sport is null)
+            {
+                return false;
+            }
+
+            sport.Name = model.Name;
+            sport.Origin = model.Origin;
+            sport.Description = model.Description;
+
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public SportsFormModel EditConvert(SportsDetailsViewModel sport)
+        {
+            var model = new SportsFormModel
+            {
+                Name = sport.Name,
+                Origin = sport.Origin,
+                Description = sport.Description
+            };
+
+            return model;
+        }
+
         public SportsDetailsViewModel GetSport(int id)
             => context.Sports
                 .Where(s => s.Id == id)

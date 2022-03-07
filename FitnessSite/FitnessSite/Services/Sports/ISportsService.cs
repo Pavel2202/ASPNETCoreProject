@@ -10,5 +10,11 @@
         void Create(SportsFormModel model);
 
         SportsDetailsViewModel GetSport(int id);
+
+        SportsFormModel EditConvert(SportsDetailsViewModel sport);
+
+        bool Edit(int id, SportsFormModel model);
+
+        void Delete(int id);
     }
 }

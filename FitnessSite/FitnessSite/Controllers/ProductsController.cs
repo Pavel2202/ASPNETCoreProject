@@ -85,8 +85,6 @@
                 return BadRequest();
             }
 
-            var product = service.GetProduct(id);
-
             return this.RedirectToAction("Details", new { id });
         }
 
