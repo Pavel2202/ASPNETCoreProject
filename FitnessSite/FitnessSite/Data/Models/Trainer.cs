@@ -9,7 +9,7 @@
     {
         public Trainer()
         {
-            this.Customers = new List<User>();
+            this.Customers = new HashSet<User>();
         }
 
         [Key]
@@ -26,6 +26,9 @@
         [Required]
         [MaxLength(TrainerPhoneNumberMaxLength)]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        public string Description { get; set; }
 
         [Required]
         public int SportId { get; set; }

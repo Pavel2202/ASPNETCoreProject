@@ -8,6 +8,7 @@
         public const int TrainerEmailMaxLength = 40;
         public const int TrainerPhoneNumberMinLength = 8;
         public const int TrainerPhoneNumberMaxLength = 15;
+        public const int TrainerDescriptionMinLength = 30;
 
         public const int RecipeTitleMinLength = 3;
         public const int RecipeTitleMaxLength = 30;

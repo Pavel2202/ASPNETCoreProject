@@ -6,6 +6,7 @@ namespace FitnessSite
     using FitnessSite.Services.Products;
     using FitnessSite.Services.Recipes;
     using FitnessSite.Services.Sports;
+    using FitnessSite.Services.Trainers;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.HttpsPolicy;
@@ -50,6 +51,7 @@ namespace FitnessSite
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<ICartsService, CartsService>();
             services.AddTransient<ISportsService, SportsService>();
+            services.AddTransient<ITrainersService, TrainersService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
