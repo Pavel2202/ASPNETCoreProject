@@ -15,9 +15,19 @@
             this.service = service;
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery] AllTrainersQueryModel query)
         {
-            return this.RedirectToAction("Index", "Home");
+            var trainers = service.AllTrainers(query);
+
+            var trainersCount = service.TotalTrainers();
+
+            return this.View(new AllTrainersQueryModel
+            {
+                SearchTerm = query.SearchTerm,
+                Sorting = query.Sorting,
+                TotalTrainers = trainersCount,
+                Trainers = trainers
+            });
         }
 
         [Authorize]

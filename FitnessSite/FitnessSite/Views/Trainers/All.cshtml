@@ -1,0 +1,60 @@
+﻿@model AllTrainersQueryModel
+
+@{
+    ViewData["Title"] = "All Trainers";
+}
+
+<h2 class="heading-margin text-center">All Trainers</h2>
+
+<form method="get">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Trainer name..."/>
+            </div>
+        </div>
+
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="Sorting">Sort by</label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0" selected>Date Created</option>
+                    <option value="1">Name</option>
+                    <option value="2">Customers count</option>
+                </select>
+            </div>
+        </div>
+     </div>
+</form>
+
+<div class="row">
+@foreach (var trainer in Model.Trainers)
+{
+    <div class="col-md-4" style="width: 18rem;">
+        <div class="card mb-3">
+            <img class="card-img-top" src="@trainer.ImageUrl" alt="@trainer.FullName">
+            <div class="card-body">
+                <h5 class="card-title">@trainer.FullName</h5>
+                <h6 class="card-title">@trainer.Sport</h6>
+                    <a asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id" class="btn btn-primary">Read more</a>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+@{
+    var lastPage = Math.Ceiling((double)Model.TotalTrainers / AllTrainersQueryModel.TrainersPerPage);
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)" 
+        asp-controller="Trainers" asp-action="All" asp-route-currentPage="@(Model.CurrentPage - 1)">Previous Page</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary float-right @(Model.CurrentPage == lastPage ? "disabled" : string.Empty)"
+        asp-controller="Trainers" asp-action="All" asp-route-currentPage="@(Model.CurrentPage + 1)">Next Page</a>
+    </div>
+</div>

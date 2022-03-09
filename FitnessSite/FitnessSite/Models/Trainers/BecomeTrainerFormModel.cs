@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Models.Trainers
 {
+    using System.Linq;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -20,6 +21,10 @@
         [Phone]
         [StringLength(TrainerPhoneNumberMaxLength, MinimumLength = TrainerPhoneNumberMinLength)]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        [Url]
+        public string ImageUrl { get; set; }
 
         [Required]
         [StringLength(

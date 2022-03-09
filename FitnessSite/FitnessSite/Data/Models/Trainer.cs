@@ -28,6 +28,9 @@
         public string PhoneNumber { get; set; }
 
         [Required]
+        public string ImageUrl { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         [Required]

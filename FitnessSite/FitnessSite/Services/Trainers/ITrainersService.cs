@@ -8,5 +8,9 @@
         IEnumerable<TrainerSportsViewModel> AllSports();
 
         bool Create(BecomeTrainerFormModel model, string userId);
+
+        IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query);
+
+        int TotalTrainers();
     }
 }
