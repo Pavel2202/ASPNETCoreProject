@@ -78,6 +78,45 @@
             return true;
         }
 
+        public TrainersDetailsViewModel GetTrainer(int id)
+        {
+            var trainer = context.Trainers
+                .Where(t => t.Id == id)
+                .Select(t => new TrainersDetailsViewModel
+                {
+                    Id = t.Id,
+                    FullName = t.FullName,
+                    ImageUrl = t.ImageUrl,
+                    Description = t.Description,
+                    Sport = t.Sport.Name
+                }).First();
+
+            return trainer;
+        }
+
+        public bool Hire(int trainerId, string userId)
+        {
+            var trainer = context.Trainers.FirstOrDefault(t => t.Id == trainerId);
+
+            if (trainer.Customers.Any(t => t.Id == userId))
+            {
+                return false;
+            }
+
+            if (trainer.UserId == userId)
+            {
+                return false;
+            }
+
+            var user = context.Users.FirstOrDefault(u => u.Id == userId);
+
+            trainer.Customers.Add(user);
+
+            context.SaveChanges();
+
+            return true;
+        }
+
         public int TotalTrainers()
             => context.Trainers.Count();
     }

@@ -59,7 +59,28 @@
                 return BadRequest();
             }
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Trainers", "All");
+        }
+
+        public IActionResult Details(int id)
+        {
+            var trainer = service.GetTrainer(id);
+
+            return this.View(trainer);
+        }
+
+        public IActionResult Hire(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var hire = service.Hire(id, userId);
+
+            if (!hire)
+            {
+                return BadRequest();
+            }
+
+            return this.RedirectToAction("Trainers", "All");
         }
     }
 }

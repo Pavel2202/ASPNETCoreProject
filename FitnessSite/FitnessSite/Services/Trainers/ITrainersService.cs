@@ -12,5 +12,9 @@
         IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query);
 
         int TotalTrainers();
+
+        TrainersDetailsViewModel GetTrainer(int id);
+
+        bool Hire(int trainerId, string userId);
     }
 }

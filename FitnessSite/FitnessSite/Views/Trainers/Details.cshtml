@@ -1,0 +1,33 @@
+﻿@model TrainersDetailsViewModel
+
+@{
+    ViewData["Title"] = @Model.FullName;
+}
+
+<div class="row">
+    <div class="col-md-6 offset-5">
+        <h2>@Model.FullName</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 offset-6">
+        <h4>@Model.Sport</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <img class="card-img-top mb-3" src="@Model.ImageUrl" alt="@Model.FullName">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 offset-2 mb-3">
+        @Model.Description
+    </div>
+</div>
+
+<div class="row col-md-6 offset-6">
+    <a asp-controller="Trainers" asp-action="Hire" asp-route-id="@Model.Id" class="btn btn-primary">Hire</a>
+</div>
