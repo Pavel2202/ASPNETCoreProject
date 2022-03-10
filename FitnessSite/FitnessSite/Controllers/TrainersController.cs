@@ -21,11 +21,14 @@
 
             var trainersCount = service.TotalTrainers();
 
+            var sports = service.AllSports();
+
             return this.View(new AllTrainersQueryModel
             {
                 SearchTerm = query.SearchTerm,
                 Sorting = query.Sorting,
                 TotalTrainers = trainersCount,
+                Sports = sports,
                 Trainers = trainers
             });
         }
@@ -59,7 +62,7 @@
                 return BadRequest();
             }
 
-            return this.RedirectToAction("Trainers", "All");
+            return this.RedirectToAction("All", "Trainers");
         }
 
         public IActionResult Details(int id)
@@ -69,6 +72,7 @@
             return this.View(trainer);
         }
 
+        [Authorize]
         public IActionResult Hire(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -80,7 +84,74 @@
                 return BadRequest();
             }
 
-            return this.RedirectToAction("Trainers", "All");
+            return this.RedirectToAction("All", "Trainers");
+        }
+
+        [Authorize]
+        public IActionResult MyProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var trainerId = service.MyProfile(userId);
+
+            if (trainerId is null)
+            {
+                return this.RedirectToAction("Become", "Trainers");
+            }
+
+            var trainer = service.GetTrainer(int.Parse(trainerId));
+
+            return this.View(trainer);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!service.IsTrainer(id, userId))
+            {
+                return BadRequest();
+            }
+
+            var trainer = service.EditConvert(id);
+
+            trainer.Sports = service.AllSports();
+
+            return this.View(trainer);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, BecomeTrainerFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edited = service.Edit(id, model);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            return this.RedirectToAction("MyProfile", "Trainers");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!service.IsTrainer(id, userId))
+            {
+                return BadRequest();
+            }
+
+            service.Delete(id);
+
+            return this.RedirectToAction("All", "Trainers");
         }
     }
 }

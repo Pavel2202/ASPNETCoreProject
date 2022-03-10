@@ -25,6 +25,19 @@
                 </select>
             </div>
         </div>
+
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="Sport">Choose a sport</label>
+                <select asp-for="Sport" class="form-control">
+                    <option value="">All</option>
+                        @foreach (var sport in Model.Sports)
+                        {
+                            <option value="@sport.Id">@sport.Name</option>
+                        }
+                </select>
+            </div>
+        </div>
      </div>
 </form>
 

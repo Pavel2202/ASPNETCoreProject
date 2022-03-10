@@ -16,5 +16,15 @@
         TrainersDetailsViewModel GetTrainer(int id);
 
         bool Hire(int trainerId, string userId);
+
+        string MyProfile(string userId);
+
+        bool IsTrainer(int trainerId, string userId);
+
+        bool Edit(int id, BecomeTrainerFormModel model);
+
+        BecomeTrainerFormModel EditConvert(int id);
+
+        void Delete(int id);
     }
 }

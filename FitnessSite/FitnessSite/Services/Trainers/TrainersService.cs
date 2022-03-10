@@ -27,10 +27,16 @@
         {
             var trainersQuery = context.Trainers.AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(query.Sport))
+            {
+                trainersQuery = trainersQuery.Where(t =>
+                    t.Sport.Id == int.Parse(query.Sport));
+            }
+
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                trainersQuery = trainersQuery.Where(r =>
-                    r.FullName.ToLower().Contains(query.SearchTerm.ToLower()));
+                trainersQuery = trainersQuery.Where(t =>
+                    t.FullName.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
             trainersQuery = query.Sorting switch
@@ -78,6 +84,54 @@
             return true;
         }
 
+        public void Delete(int id)
+        {
+            var trainer = context.Trainers.FirstOrDefault(t => t.Id == id);
+
+            context.Trainers.Remove(trainer);
+
+            context.SaveChanges();
+        }
+
+        public bool Edit(int id, BecomeTrainerFormModel model)
+        {
+            var trainer = context.Trainers.FirstOrDefault(t => t.Id == id);
+
+            if (trainer is null)
+            {
+                return false;
+            }
+
+            trainer.FullName = model.FullName;
+            trainer.Email = model.Email;
+            trainer.Description = model.Description;
+            trainer.PhoneNumber = model.PhoneNumber;
+            trainer.ImageUrl = model.ImageUrl;
+            trainer.SportId = model.SportId;
+
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public BecomeTrainerFormModel EditConvert(int id)
+        {
+            var trainer = context.Trainers
+                .FirstOrDefault(t => t.Id == id);
+
+            var model = new BecomeTrainerFormModel
+            {
+                FullName = trainer.FullName,
+                Email = trainer.Email,
+                ImageUrl = trainer.ImageUrl,
+                PhoneNumber = trainer.PhoneNumber,
+                Description = trainer.Description,
+                SportId = trainer.SportId
+            };
+
+            return model;
+        }
+
         public TrainersDetailsViewModel GetTrainer(int id)
         {
             var trainer = context.Trainers
@@ -115,6 +169,30 @@
             context.SaveChanges();
 
             return true;
+        }
+
+        public bool IsTrainer(int trainerId, string userId)
+        {
+            var trainer = context.Trainers.FirstOrDefault(t => t.Id == trainerId);
+
+            if (trainer.UserId == userId)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public string MyProfile(string userId)
+        {
+            var trainerId = context.Trainers.FirstOrDefault(t => t.UserId == userId).Id.ToString();
+
+            if (trainerId is null)
+            {
+                return null;
+            }
+
+            return trainerId;
         }
 
         public int TotalTrainers()

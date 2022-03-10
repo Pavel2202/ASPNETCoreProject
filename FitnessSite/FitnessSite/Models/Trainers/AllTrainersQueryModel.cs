@@ -7,6 +7,8 @@
     {
         public const int TrainersPerPage = 6;
 
+        public string Sport { get; set; }
+
         [Display(Name = "Search")]
         public string SearchTerm { get; set; }
 
@@ -15,6 +17,8 @@
         public int CurrentPage { get; init; } = 1;
 
         public int TotalTrainers { get; set; }
+
+        public IEnumerable<TrainerSportsViewModel> Sports { get; set; }
 
         public IEnumerable<TrainerListingViewModel> Trainers { get; set; }
     }
