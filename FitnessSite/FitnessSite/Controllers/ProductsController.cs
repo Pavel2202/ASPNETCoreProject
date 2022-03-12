@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using FitnessSite.Infrastructure;
     using FitnessSite.Models.Products;
     using FitnessSite.Services.Products;
     using Microsoft.AspNetCore.Authorization;
@@ -99,9 +100,7 @@
         [Authorize]
         public IActionResult AddToCart(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            service.AddToCart(id, userId);
+            service.AddToCart(id, this.User.Id());
 
             return this.RedirectToAction("All", "Products");
         }

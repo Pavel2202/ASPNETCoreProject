@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using FitnessSite.Infrastructure;
     using FitnessSite.Services.Carts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,7 @@
         [Authorize]
         public IActionResult MyCart()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var products = service.Products(userId);
+            var products = service.Products(this.User.Id());
 
             return this.View(products);
         }
@@ -35,9 +34,7 @@
         [Authorize]
         public IActionResult Buy()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            service.Buy(userId);
+            service.Buy(this.User.Id());
 
             return this.RedirectToAction("MyCart", "Carts");
         }
@@ -45,9 +42,7 @@
         [Authorize]
         public IActionResult Clear()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            service.Clear(userId);
+            service.Clear(this.User.Id());
 
             return this.RedirectToAction("MyCart", "Carts");
         }

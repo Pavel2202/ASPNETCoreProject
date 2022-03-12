@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using FitnessSite.Infrastructure;
     using FitnessSite.Models.Trainers;
     using FitnessSite.Services.Trainers;
     using Microsoft.AspNetCore.Authorization;
@@ -53,9 +54,7 @@
                 return BadRequest();
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var created = service.Create(model, userId);
+            var created = service.Create(model, this.User.Id());
 
             if (!created)
             {
@@ -75,9 +74,7 @@
         [Authorize]
         public IActionResult Hire(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var hire = service.Hire(id, userId);
+            var hire = service.Hire(id, this.User.Id());
 
             if (!hire)
             {
@@ -90,9 +87,7 @@
         [Authorize]
         public IActionResult MyProfile()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var trainerId = service.MyProfile(userId);
+            var trainerId = service.MyProfile(this.User.Id());
 
             if (trainerId is null)
             {
@@ -107,9 +102,7 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!service.IsTrainer(id, userId))
+            if (!service.IsTrainer(id, this.User.Id()))
             {
                 return BadRequest();
             }
@@ -142,9 +135,7 @@
 
         public IActionResult Delete(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!service.IsTrainer(id, userId))
+            if (!service.IsTrainer(id, this.User.Id()))
             {
                 return BadRequest();
             }

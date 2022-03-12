@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using FitnessSite.Infrastructure;
     using FitnessSite.Models.Recipes;
     using FitnessSite.Services.Recipes;
     using Microsoft.AspNetCore.Authorization;
@@ -41,9 +42,7 @@
         [Authorize]
         public IActionResult Mine()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var recipes = service.MyRecipes(userId);
+            var recipes = service.MyRecipes(this.User.Id());
 
             return this.View(recipes);
         }
@@ -61,9 +60,7 @@
                 return this.View(recipe);
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            service.CreateRecipe(recipe, userId);
+            service.CreateRecipe(recipe, this.User.Id());
 
             return this.RedirectToAction("All", "Recipes");
         }
@@ -71,9 +68,7 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!service.IsCreatorOfRecipe(id, userId))
+            if (!service.IsCreatorOfRecipe(id, this.User.Id()))
             {
                 return Unauthorized();
             }
@@ -109,9 +104,7 @@
         [Authorize]
         public IActionResult Delete(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!service.IsCreatorOfRecipe(id, userId))
+            if (!service.IsCreatorOfRecipe(id, this.User.Id()))
             {
                 return Unauthorized();
             }
