@@ -15,11 +15,20 @@
             this.service = service;
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery] AllSportsQueryModel query)
         {
-            var sports = service.All();
+            var sports = service.All(query);
 
-            return this.View(sports);
+            var totalSports = service.TotalSports();
+
+            return this.View(new AllSportsQueryModel
+            {
+                Sports = sports,
+                SearchTerm = query.SearchTerm,
+                CurrentPage = query.CurrentPage,
+                TotalSports = totalSports,
+                Sorting = query.Sorting
+            });
         }
 
         [Authorize]

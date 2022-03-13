@@ -11,7 +11,7 @@
         <div class="col-md-4 mb-4">
             <div class="form-group">
                 <label asp-for="SearchTerm"></label>
-                <input asp-for="SearchTerm" class="form-control" placeholder="Trainer name..."/>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Guardiola, Basketball..."/>
             </div>
         </div>
 
@@ -22,6 +22,7 @@
                     <option value="0" selected>Date Created</option>
                     <option value="1">Name</option>
                     <option value="2">Customers count</option>
+                    <option value="3">Sport</option>
                 </select>
             </div>
         </div>
@@ -40,6 +41,11 @@
         </div>
      </div>
 </form>
+
+@if (!Model.Trainers.Any())
+{
+    <h2 class="text-center">No trainers found!</h2>
+}
 
 <div class="row">
 @foreach (var trainer in Model.Trainers)

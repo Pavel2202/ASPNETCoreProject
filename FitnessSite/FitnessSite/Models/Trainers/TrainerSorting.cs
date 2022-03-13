@@ -4,6 +4,7 @@
     {
         DateCreated = 0,
         FullName = 1,
-        Customers = 2
+        Customers = 2,
+        Sport = 3
     }
 }

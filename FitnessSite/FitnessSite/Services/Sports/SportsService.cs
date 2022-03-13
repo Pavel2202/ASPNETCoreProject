@@ -15,15 +15,36 @@
             this.context = context;
         }
 
-        public IEnumerable<SportsListingViewModel> All()
-            => context.Sports
-            .Select(s => new SportsListingViewModel
+        public IEnumerable<SportsListingViewModel> All(AllSportsQueryModel query)
+        {
+            var sportsQuery = context.Sports.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                Id = s.Id,
-                Name = s.Name,
-                Origin = s.Origin
-            })
-            .ToList();
+                sportsQuery = sportsQuery.Where(s =>
+                    s.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    s.Origin.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            sportsQuery = query.Sorting switch
+            {
+                SportSorting.Name => sportsQuery.OrderByDescending(r => r.Name),
+                SportSorting.Origin => sportsQuery.OrderByDescending(r => r.Origin),
+                SportSorting.DateCreated or _ => sportsQuery.OrderByDescending(r => r.Id)
+            };
+
+            var sports = sportsQuery
+                .Skip((query.CurrentPage - 1) * AllSportsQueryModel.SportsPerPage)
+                .Take(AllSportsQueryModel.SportsPerPage)
+                .Select(s => new SportsListingViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Origin = s.Origin
+                }).ToList();
+
+            return sports;
+        }
 
         public void Create(SportsFormModel model)
         {
@@ -89,5 +110,8 @@
                     Origin = s.Origin,
                     Description = s.Description
                 }).First();
+
+        public int TotalSports()
+            => context.Sports.Count();
     }
 }

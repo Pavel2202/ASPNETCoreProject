@@ -36,13 +36,15 @@
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 trainersQuery = trainersQuery.Where(t =>
-                    t.FullName.ToLower().Contains(query.SearchTerm.ToLower()));
+                    t.FullName.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    t.Sport.Name.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
             trainersQuery = query.Sorting switch
             {
                 TrainerSorting.FullName => trainersQuery.OrderByDescending(t => t.FullName),
                 TrainerSorting.Customers => trainersQuery.OrderByDescending(t => t.Customers.Count),
+                TrainerSorting.Sport => trainersQuery.OrderByDescending(t => t.Sport.Name),
                 TrainerSorting.DateCreated or _ => trainersQuery.OrderByDescending(t => t.Id)
             };
 
