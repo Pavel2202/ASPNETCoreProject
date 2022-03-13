@@ -13,7 +13,17 @@
 
      @if (isAdmin)
      {
-            
+        <li class="dropdown">
+            <a class="btn dropdown-toggle nav-link text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="dropdownMenu" data-toggle="dropdown">Administration</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item dropdownMenu" asp-area="Admin" asp-controller="Products" asp-action="All">Products</a>
+                <a class="dropdown-item dropdownMenu" asp-area="Admin" asp-controller="Recipes" asp-action="All">Recipes</a>
+                <a class="dropdown-item dropdownMenu" asp-area="Admin" asp-controller="Trainers" asp-action="All">Trainers</a>
+                <a class="dropdown-item dropdownMenu" asp-area="Admin" asp-controller="Sports" asp-action="All">Sports</a>
+            </div>
+        </li>
      }
      else
      {

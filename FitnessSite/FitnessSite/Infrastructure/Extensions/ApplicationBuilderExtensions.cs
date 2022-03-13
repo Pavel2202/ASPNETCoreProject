@@ -1,4 +1,4 @@
-﻿namespace FitnessSite.Infrastructure
+﻿namespace FitnessSite.Infrastructure.Extensions
 {
     using System;
     using System.Linq;

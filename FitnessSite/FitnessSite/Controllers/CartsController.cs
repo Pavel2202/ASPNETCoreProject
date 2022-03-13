@@ -1,6 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
-    using FitnessSite.Infrastructure;
+    using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Services.Carts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

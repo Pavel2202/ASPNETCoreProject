@@ -2,7 +2,7 @@ namespace FitnessSite
 {
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
-    using FitnessSite.Infrastructure;
+    using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Services.Carts;
     using FitnessSite.Services.Home;
     using FitnessSite.Services.Products;
@@ -11,9 +11,7 @@ namespace FitnessSite
     using FitnessSite.Services.Trainers;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -45,6 +43,8 @@ namespace FitnessSite
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddMemoryCache();
 

@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Products
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Products;
@@ -10,10 +12,12 @@
     public class ProductsService : IProductsService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public ProductsService(ApplicationDbContext context)
+        public ProductsService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public void AddToCart(int productId, string userId)
@@ -64,13 +68,8 @@
             var products = productsQuery
                 .Skip((query.CurrentPage - 1) * AllProductsQueryModel.ProductsPerPage)
                 .Take(AllProductsQueryModel.ProductsPerPage)
-                .Select(p => new ProductListingViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    ImageUrl = p.ImageUrl,
-                    Price = p.Price
-                }).ToList();
+                .ProjectTo<ProductListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
             return products;
         }
@@ -89,14 +88,9 @@
         {
             var type = Enum.Parse(typeof(ProductType), model.Type);
 
-            var product = new Product()
-            {
-                Name = model.Name,
-                Price = model.Price,
-                ImageUrl = model.ImageUrl,
-                Type = (ProductType)type,
-                Description = model.Description
-            };
+            var product = mapper.Map<Product>(model);
+
+            product.Type = (ProductType)type;
 
             context.Products.Add(product);
             context.SaveChanges();
@@ -146,14 +140,9 @@
                 .Where(t => t.Name == product.Name)
                 .Select(t => t.Type.ToString()).FirstOrDefault();
 
-            var model = new ProductFormModel
-            {
-                Name = product.Name,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl,
-                Type = type,
-                Description = product.Description
-            };
+            var model = mapper.Map<ProductFormModel>(product);
+
+            model.Type = type;
 
             return model;
         }
@@ -161,14 +150,8 @@
         public ProductDetailsViewModel GetProduct(int id)
             => context.Products
                 .Where(p => p.Id == id)
-                .Select(p => new ProductDetailsViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Description = p.Description
-                }).First();
+                .ProjectTo<ProductDetailsViewModel>(mapper.ConfigurationProvider)
+                .First();
 
         public int TotalProducts()
             => context.Products.Count();

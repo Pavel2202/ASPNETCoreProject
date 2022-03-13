@@ -1,6 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
-    using FitnessSite.Infrastructure;
+    using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Recipes;
     using FitnessSite.Services.Recipes;
     using Microsoft.AspNetCore.Authorization;

@@ -4,7 +4,7 @@
 
     using static Data.DataConstants;
 
-    public class ProductFormModel
+    public class ProductFormModel : IProductModel
     {
         [Required]
         [StringLength(ProductNameMaxLength, MinimumLength = ProductNameMinLength)]

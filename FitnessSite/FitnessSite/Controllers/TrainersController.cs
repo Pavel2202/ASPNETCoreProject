@@ -1,11 +1,10 @@
 ﻿namespace FitnessSite.Controllers
 {
-    using FitnessSite.Infrastructure;
+    using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Trainers;
     using FitnessSite.Services.Trainers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
 
     public class TrainersController : Controller
     {

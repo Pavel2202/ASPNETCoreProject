@@ -1,19 +1,21 @@
 ﻿namespace FitnessSite.Controllers
 {
-    using FitnessSite.Infrastructure;
+    using AutoMapper;
+    using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Products;
     using FitnessSite.Services.Products;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
 
     public class ProductsController : Controller
     {
         private readonly IProductsService service;
+        private readonly IMapper mapper;
 
-        public ProductsController(IProductsService service)
+        public ProductsController(IProductsService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllProductsQueryModel query)
@@ -24,14 +26,13 @@
 
             var productTypes = service.AllTypes();
 
-            return this.View(new AllProductsQueryModel
-            {
-                Products = products,
-                SearchTerm = query.SearchTerm,
-                Sorting = query.Sorting,
-                TotalProducts = totalProducts,
-                Types = productTypes
-            });
+            var productForm = this.mapper.Map<AllProductsQueryModel>(query);
+
+            productForm.Products = products;
+            productForm.TotalProducts = totalProducts;
+            productForm.Types = productTypes;
+
+            return this.View(productForm);
         }
 
         [Authorize]
@@ -88,21 +89,21 @@
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(int id, ProductFormModel model)
+        public IActionResult Edit(int id, ProductFormModel product)
         {
             if (!ModelState.IsValid)
             {
-                return this.View(model);
+                return this.View(product);
             }
 
-            var edited = service.Edit(id, model);
+            var edited = service.Edit(id, product);
 
             if (!edited)
             {
                 return BadRequest();
             }
 
-            return this.RedirectToAction("Details", new { id });
+            return this.RedirectToAction("Details", new { id, information = product.ProductInformation() });
         }
 
         [Authorize]
