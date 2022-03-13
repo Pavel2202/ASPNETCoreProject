@@ -1,20 +1,40 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using FitnessSite.Data.Models;
+
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ITrainersService Trainers
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Trainers" asp-action="MyProfile">Trainer Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Carts" asp-action="MyCart">My Cart</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Trainers" asp-action="Become">Become Trainer</a>
-    </li>
+     var userId = User.Id();
+     var isTrainer = Trainers.IsUserTrainer(userId);
+     var isAdmin = User.IsAdmin();
+
+     @if (isAdmin)
+     {
+            
+     }
+     else
+     {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Carts" asp-action="MyCart">My Cart</a>
+        </li>
+
+        @if(isTrainer)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Trainers" asp-action="MyProfile">Trainer Profile</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Trainers" asp-action="Become">Become Trainer</a>
+            </li>
+        }   
+     }
+
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
     </li>

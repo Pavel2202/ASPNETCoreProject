@@ -102,7 +102,7 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            if (!service.IsTrainer(id, this.User.Id()))
+            if (!service.IsTrainer(id, this.User.Id()) && !this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -135,7 +135,7 @@
 
         public IActionResult Delete(int id)
         {
-            if (!service.IsTrainer(id, this.User.Id()))
+            if (!service.IsTrainer(id, this.User.Id()) && !this.User.IsAdmin())
             {
                 return BadRequest();
             }

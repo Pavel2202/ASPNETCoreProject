@@ -1,0 +1,33 @@
+﻿@model ProductFormModel
+
+<form method="post">
+  <div class="form-group">
+    <label asp-for="Name">Name</label>
+    <input asp-for="Name" class="form-control" placeholder="Product name here...">
+    <span asp-validation-for="Name" class="small text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label asp-for="Price">Price</label>
+    <input asp-for="Price" class="form-control" placeholder="Product price here...">
+    <span asp-validation-for="Price" class="small text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label asp-for="ImageUrl">Image Url</label>
+    <input asp-for="ImageUrl" class="form-control" placeholder="Product image here...">
+    <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label asp-for="Type"></label>
+    <select asp-for="Type" class="form-control">
+      <option>Supplement</option>
+      <option>Equipment</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label asp-for="Description">Description</label>
+    <textarea asp-for="Description" class="form-control" rows="6" placeholder="Product description here..."></textarea>
+    <span asp-validation-for="Description" class="small text-danger"></span>
+  </div>
+
+  <input class="btn btn-primary float-right" type="submit" value="Save"/>
+</form>

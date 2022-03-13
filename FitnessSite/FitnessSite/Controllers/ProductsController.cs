@@ -36,7 +36,14 @@
 
         [Authorize]
         public IActionResult Add()
-            => this.View();
+        {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            return this.View();
+        }
 
         [HttpPost]
         [Authorize]
@@ -63,6 +70,11 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             var product = service.GetProduct(id);
 
             var model = service.EditConvert(product);
@@ -92,6 +104,11 @@
         [Authorize]
         public IActionResult Delete(int id)
         {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             service.Delete(id);
 
             return this.RedirectToAction("All", "Products");

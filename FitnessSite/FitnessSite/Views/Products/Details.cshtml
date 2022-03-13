@@ -28,4 +28,4 @@
     </div>
 </div>
 
-    <a asp-controller="Products" asp-action="AddToCart" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">Add to Cart</a>
+<a asp-controller="Products" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">Add to Cart</a>

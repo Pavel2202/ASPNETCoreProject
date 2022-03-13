@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using FitnessSite.Infrastructure;
     using FitnessSite.Models.Sports;
     using FitnessSite.Services.Sports;
     using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,14 @@
 
         [Authorize]
         public IActionResult Add()
-            => this.View();
+        {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            return this.View();
+        }
 
         [HttpPost]
         [Authorize]
@@ -49,6 +57,11 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             var sport = service.GetSport(id);
 
             var model = service.EditConvert(sport);
@@ -78,6 +91,11 @@
         [Authorize]
         public IActionResult Delete(int id)
         {
+            if (!this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             service.Delete(id);
 
             return this.RedirectToAction("All", "Sports");

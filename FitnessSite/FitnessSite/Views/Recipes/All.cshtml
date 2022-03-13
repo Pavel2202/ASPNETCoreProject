@@ -30,20 +30,12 @@
 <a asp-controller="Recipes" asp-action="Add" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">Add Recipe</a>
 <a asp-controller="Recipes" asp-action="Mine" class="btn btn-primary btn-lg active mb-4" role="button" aria-pressed="true">My Recipes</a>
 
-<div class="row">
-@foreach (var recipe in Model.Recipes)
+@if (!Model.Recipes.Any())
 {
-    <div class="col-md-4" style="width: 18rem;">
-        <div class="card mb-3">
-            <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
-            <div class="card-body">
-                <h5 class="card-title">@recipe.Title</h5>
-                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">Read more</a>
-            </div>
-        </div>
-    </div>
+    <h2 class="text-center">No recipes found!</h2>
 }
-</div>
+
+<partial name="_RecipesPartial" model="@Model.Recipes" />
 
 @{
     var lastPage = Math.Ceiling((double)Model.TotalRecipes / AllRecipesQueryModel.RecipesPerPage);

@@ -50,9 +50,17 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
                 <h6>Price: @product.Price</h6>
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Read more</a>
-                    <a asp-controller="Products" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-primary">Add to Cart</a>
-            </div>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Read more</a>                    
+                    @if (User.IsAdmin())
+                    {
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Products" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-primary">Add to Cart</a>
+                    }
+                </div>
         </div>
     </div>
 }

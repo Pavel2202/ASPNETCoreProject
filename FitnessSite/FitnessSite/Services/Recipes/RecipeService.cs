@@ -138,10 +138,10 @@
             return false;
         }
 
-        public IEnumerable<MyRecipesViewModel> MyRecipes(string userId)
+        public IEnumerable<RecipeListingViewModel> MyRecipes(string userId)
             => context.Recipes
                 .Where(r => r.CreatorId == userId)
-                .Select(r => new MyRecipesViewModel
+                .Select(r => new RecipeListingViewModel
                 {
                     Id = r.Id,
                     Title = r.Title,

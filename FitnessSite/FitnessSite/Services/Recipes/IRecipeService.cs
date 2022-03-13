@@ -13,7 +13,7 @@
 
         RecipeDetailsViewModel GetRecipe(int recipeId);
 
-        IEnumerable<MyRecipesViewModel> MyRecipes(string userId);
+        IEnumerable<RecipeListingViewModel> MyRecipes(string userId);
 
         bool IsCreatorOfRecipe(int recipeId, string userId);
 

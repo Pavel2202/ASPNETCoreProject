@@ -5,7 +5,6 @@
     using FitnessSite.Services.Recipes;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
 
     public class RecipesController : Controller
     {
@@ -68,7 +67,7 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            if (!service.IsCreatorOfRecipe(id, this.User.Id()))
+            if (!service.IsCreatorOfRecipe(id, this.User.Id()) && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -104,7 +103,7 @@
         [Authorize]
         public IActionResult Delete(int id)
         {
-            if (!service.IsCreatorOfRecipe(id, this.User.Id()))
+            if (!service.IsCreatorOfRecipe(id, this.User.Id()) && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }

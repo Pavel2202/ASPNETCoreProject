@@ -26,7 +26,7 @@
                     FullName = t.FullName,
                     Sport = t.Sport.Name,
                     ImageUrl = t.ImageUrl
-                }).Take(2)
+                }).Take(3)
             .ToList();
 
         public ProductListingViewModel DailyProduct()

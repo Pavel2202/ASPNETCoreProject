@@ -26,5 +26,7 @@
         BecomeTrainerFormModel EditConvert(int id);
 
         void Delete(int id);
+
+        bool IsUserTrainer(string userId);
     }
 }

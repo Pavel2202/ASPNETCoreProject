@@ -12,6 +12,11 @@
             <h5 class="card-title">@sport.Name</h5>
             <p class="card-text">Origin: @sport.Origin</p>
             <a asp-controller="Sports" asp-action="Details" asp-route-id="@sport.Id" class="btn btn-primary">Learn more</a>
+            @if (User.IsAdmin())
+            {
+                <a asp-controller="Sports" asp-action="Edit" asp-route-id="@sport.Id" class="btn btn-warning">Edit</a>
+                <a asp-controller="Sports" asp-action="Delete" asp-route-id="@sport.Id" class="btn btn-danger">Delete</a>
+            }
         </div>
     </div>
 }

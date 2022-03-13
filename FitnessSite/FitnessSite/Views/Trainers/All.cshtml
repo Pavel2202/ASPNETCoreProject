@@ -50,9 +50,17 @@
             <div class="card-body">
                 <h5 class="card-title">@trainer.FullName</h5>
                 <h6 class="card-title">@trainer.Sport</h6>
-                    <a asp-controller="Trainers" asp-action="Hire" asp-route-id="@trainer.Id" class="btn btn-primary">Hire</a>
                     <a asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id" class="btn btn-primary">Read more</a>
-            </div>
+                    @if (User.IsAdmin())
+                    {
+                        <a asp-controller="Trainers" asp-action="Edit" asp-route-id="@trainer.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Trainers" asp-action="Delete" asp-route-id="@trainer.Id" class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Trainers" asp-action="Hire" asp-route-id="@trainer.Id" class="btn btn-success">Hire</a>
+                    }
+             </div>
         </div>
     </div>
 }

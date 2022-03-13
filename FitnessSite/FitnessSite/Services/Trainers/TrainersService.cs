@@ -183,6 +183,19 @@
             return false;
         }
 
+        public bool IsUserTrainer(string userId)
+        {
+            var trainer = context.Trainers
+                .FirstOrDefault(t => t.UserId == userId);
+
+            if (trainer is null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public string MyProfile(string userId)
         {
             var trainerId = context.Trainers.FirstOrDefault(t => t.UserId == userId).Id.ToString();
