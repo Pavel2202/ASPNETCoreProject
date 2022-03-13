@@ -64,9 +64,14 @@
             return this.RedirectToAction("All", "Trainers");
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var trainer = service.GetTrainer(id);
+
+            if (information != trainer.TrainerInformation())
+            {
+                return BadRequest();
+            }
 
             return this.View(trainer);
         }

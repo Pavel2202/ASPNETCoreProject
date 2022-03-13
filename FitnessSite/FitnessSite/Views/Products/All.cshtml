@@ -50,7 +50,7 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
                 <h6>Price: @product.Price</h6>
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Read more</a>                    
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" asp-route-information="@product.ProductInformation()" class="btn btn-primary">Read more</a>                    
                     @if (User.IsAdmin())
                     {
                         <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>

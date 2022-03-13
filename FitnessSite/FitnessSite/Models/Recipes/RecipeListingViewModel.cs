@@ -1,6 +1,6 @@
 ﻿namespace FitnessSite.Models.Recipes
 {
-    public class RecipeListingViewModel
+    public class RecipeListingViewModel : IRecipeModel
     {
         public int Id { get; set; }
 

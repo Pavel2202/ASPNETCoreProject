@@ -13,7 +13,7 @@
 
         int TotalTrainers();
 
-        TrainersDetailsViewModel GetTrainer(int id);
+        TrainerDetailsViewModel GetTrainer(int id);
 
         bool Hire(int trainerId, string userId);
 

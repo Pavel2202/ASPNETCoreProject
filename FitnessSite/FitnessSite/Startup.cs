@@ -84,9 +84,14 @@ namespace FitnessSite
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapDefaultAreaRoute();
+
+                    endpoints.MapRecipeRoute();
+                    endpoints.MapProductRoute();
+                    endpoints.MapSportRoute();
+                    endpoints.MapTrainerRoute();
+
+                    endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
         }

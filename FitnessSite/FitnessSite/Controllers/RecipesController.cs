@@ -31,9 +31,14 @@
             });
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var recipe = service.GetRecipe(id);
+
+            if (information != recipe.RecipeInformation())
+            {
+                return BadRequest();
+            }
 
             return this.View(recipe);
         }

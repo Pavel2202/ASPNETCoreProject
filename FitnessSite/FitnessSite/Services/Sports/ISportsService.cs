@@ -5,7 +5,7 @@
 
     public interface ISportsService
     {
-        IEnumerable<SportsViewModel> All();
+        IEnumerable<SportsListingViewModel> All();
 
         void Create(SportsFormModel model);
 

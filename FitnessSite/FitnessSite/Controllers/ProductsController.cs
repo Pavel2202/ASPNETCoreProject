@@ -59,10 +59,14 @@
             return this.RedirectToAction("All", "Products");
         }
 
-        [Authorize]
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var product = service.GetProduct(id);
+
+            if (information != product.ProductInformation())
+            {
+                return BadRequest();
+            }
 
             return this.View(product);
         }

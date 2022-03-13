@@ -132,11 +132,11 @@
             return model;
         }
 
-        public TrainersDetailsViewModel GetTrainer(int id)
+        public TrainerDetailsViewModel GetTrainer(int id)
         {
             var trainer = context.Trainers
                 .Where(t => t.Id == id)
-                .Select(t => new TrainersDetailsViewModel
+                .Select(t => new TrainerDetailsViewModel
                 {
                     Id = t.Id,
                     FullName = t.FullName,

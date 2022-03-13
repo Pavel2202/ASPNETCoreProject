@@ -8,7 +8,7 @@
             <img class="card-img-top" src="@recipe.ImageUrl" alt="@recipe.Title">
             <div class="card-body">
                 <h5 class="card-title">@recipe.Title</h5>
-                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary mr-3">Read more</a>
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" asp-route-information="@recipe.RecipeInformation()" class="btn btn-primary mr-3">Read more</a>
                     @if (ViewBag.AllowRecipeEdit == true || this.User.IsAdmin())
                     {
                         <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@recipe.Id" class="btn btn-warning mr-3">Edit</a>

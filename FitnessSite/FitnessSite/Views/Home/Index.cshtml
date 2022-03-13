@@ -16,7 +16,7 @@
             <div class="card-body">
                 <h5 class="card-title">@Model.Product.Name</h5>
                 <h6>Price: @Model.Product.Price</h6>
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Product.Id" class="btn btn-primary">Read more</a>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Product.Id" asp-route-information="@Model.Product.ProductInformation()" class="btn btn-primary">Read more</a>
                     @if (User.IsAdmin())
                     {
                         <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Product.Id" class="btn btn-warning">Edit</a>
@@ -35,7 +35,7 @@
             <img class="card-img-top" src="@Model.Recipe.ImageUrl" alt="@Model.Recipe.Title">
             <div class="card-body">
                 <h5 class="card-title">@Model.Recipe.Title</h5>
-                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@Model.Recipe.Id" class="btn btn-primary">Read more</a>
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@Model.Recipe.Id" asp-route-information="@Model.Recipe.RecipeInformation()" class="btn btn-primary">Read more</a>
                     @if (this.User.IsAdmin())
                     {
                         <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@Model.Recipe.Id" class="btn btn-warning">Edit</a>
@@ -55,7 +55,7 @@
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
                 <img class="d-block w-100" src="@trainer.ImageUrl" alt="@trainer.FullName">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5><a class="btn btn-primary" asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id">@trainer.FullName</a></h5>
+                    <h5><a class="btn btn-primary" asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id" asp-route-information="@trainer.TrainerInformation()">@trainer.FullName</a></h5>
                 </div>
             </div>
         }

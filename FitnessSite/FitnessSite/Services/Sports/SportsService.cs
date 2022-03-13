@@ -15,9 +15,9 @@
             this.context = context;
         }
 
-        public IEnumerable<SportsViewModel> All()
+        public IEnumerable<SportsListingViewModel> All()
             => context.Sports
-            .Select(s => new SportsViewModel
+            .Select(s => new SportsListingViewModel
             {
                 Id = s.Id,
                 Name = s.Name,

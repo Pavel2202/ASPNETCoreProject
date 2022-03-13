@@ -47,9 +47,14 @@
             return this.RedirectToAction("All", "Sports");
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var sport = service.GetSport(id);
+
+            if (information != sport.SportInformation())
+            {
+                return BadRequest();
+            }
 
             return this.View(sport);
         }

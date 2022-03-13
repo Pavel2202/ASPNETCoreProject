@@ -1,11 +1,11 @@
 ﻿namespace FitnessSite.Models.Sports
 {
-    public class SportsDetailsViewModel : ISportsModel
+    public class SportsListingViewModel : ISportsModel
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Origin { get; set; }
-
-        public string Description { get; set; }
     }
 }
