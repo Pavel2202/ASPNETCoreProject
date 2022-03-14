@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Carts
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Models.Carts;
     using System.Collections.Generic;
@@ -8,10 +10,12 @@
     public class CartsService : ICartsService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public CartsService(ApplicationDbContext context)
+        public CartsService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public void Buy(string userId)
@@ -59,13 +63,8 @@
 
             var products = context.Products
                 .Where(p => p.CartId == cartId)
-                .Select(p => new ProductsViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    ImageUrl = p.ImageUrl,
-                    Price = p.Price
-                }).ToList();
+                .ProjectTo<ProductsViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
             return products;
         }

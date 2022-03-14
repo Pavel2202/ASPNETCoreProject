@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using AutoMapper;
     using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Recipes;
     using FitnessSite.Services.Recipes;
@@ -9,10 +10,12 @@
     public class RecipesController : Controller
     {
         private readonly IRecipeService service;
+        private readonly IMapper mapper;
 
-        public RecipesController(IRecipeService service)
+        public RecipesController(IRecipeService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllRecipesQueryModel query)
@@ -21,14 +24,11 @@
 
             var totalRecipes = service.TotalRecipes();
 
-            return this.View(new AllRecipesQueryModel
-            {
-                Recipes = recipes,
-                SearchTerm = query.SearchTerm,
-                CurrentPage = query.CurrentPage,
-                TotalRecipes = totalRecipes,
-                Sorting = query.Sorting
-            });
+            var recipeForm = this.mapper.Map<AllRecipesQueryModel>(query);
+
+            recipeForm.Recipes = recipes;
+
+            return this.View(recipeForm);
         }
 
         public IActionResult Details(int id, string information)
@@ -102,7 +102,7 @@
 
             var recipe = service.GetRecipe(id);
 
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id, information = recipe.RecipeInformation() });
         }
 
         [Authorize]

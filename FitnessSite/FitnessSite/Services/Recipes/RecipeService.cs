@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Recipes
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Recipes;
@@ -10,10 +12,12 @@
     public class RecipeService : IRecipeService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public RecipeService(ApplicationDbContext context)
+        public RecipeService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<RecipeListingViewModel> AllRecipes(AllRecipesQueryModel query)
@@ -35,25 +39,17 @@
             var recipes = recipesQuery
                 .Skip((query.CurrentPage - 1) * AllRecipesQueryModel.RecipesPerPage)
                 .Take(AllRecipesQueryModel.RecipesPerPage)
-                .Select(r => new RecipeListingViewModel
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    ImageUrl = r.ImageUrl
-                }).ToList();
+                .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
             return recipes;
         }
 
         public void CreateRecipe(RecipeFormModel model, string userId)
         {
-            Recipe recipe = new Recipe()
-            {
-                Title = model.Title,
-                ImageUrl = model.ImageUrl,
-                Description = model.Description,
-                CreatorId = userId
-            };
+            var recipe = mapper.Map<Recipe>(model);
+
+            recipe.CreatorId = userId;           
 
             context.Recipes.Add(recipe);
 
@@ -95,12 +91,7 @@
 
         public RecipeFormModel EditConvert(RecipeDetailsViewModel recipe)
         {
-            var model = new RecipeFormModel
-            {
-                Title = recipe.Title,
-                ImageUrl = recipe.ImageUrl,
-                Description = recipe.Description
-            };
+            var model = mapper.Map<RecipeFormModel>(recipe);
 
             return model;
         }
@@ -113,14 +104,9 @@
             var creator = context.Users.FirstOrDefault(u => u.Id == recipe.CreatorId);
             var username = creator.UserName.Split("@").ToArray().First();
 
-            var result = new RecipeDetailsViewModel
-            {
-                Id = recipe.Id,
-                Title = recipe.Title,
-                ImageUrl = recipe.ImageUrl,
-                Description = recipe.Description,
-                Creator = username
-            };
+            var result = mapper.Map<RecipeDetailsViewModel>(recipe);
+
+            result.Creator = username;            
 
             return result;
         }
@@ -141,12 +127,8 @@
         public IEnumerable<RecipeListingViewModel> MyRecipes(string userId)
             => context.Recipes
                 .Where(r => r.CreatorId == userId)
-                .Select(r => new RecipeListingViewModel
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    ImageUrl = r.ImageUrl
-                }).ToList();
+                .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
         public int TotalRecipes()
             => context.Recipes.Count();

@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Trainers
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Trainers;
@@ -9,19 +11,18 @@
     public class TrainersService : ITrainersService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public TrainersService(ApplicationDbContext context)
+        public TrainersService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<TrainerSportsViewModel> AllSports()
             => context.Sports
-            .Select(s => new TrainerSportsViewModel
-            {
-                Id = s.Id,
-                Name = s.Name
-            }).ToList();
+                .ProjectTo<TrainerSportsViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
         public IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query)
         {
@@ -51,13 +52,8 @@
             var trainers = trainersQuery
                 .Skip((query.CurrentPage - 1) * AllTrainersQueryModel.TrainersPerPage)
                 .Take(AllTrainersQueryModel.TrainersPerPage)
-                .Select(t => new TrainerListingViewModel
-                {
-                    Id = t.Id,
-                    FullName = t.FullName,
-                    Sport = t.Sport.Name,
-                    ImageUrl = t.ImageUrl
-                }).ToList();
+                .ProjectTo<TrainerListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
             return trainers;
         }
@@ -69,16 +65,9 @@
                 return false;
             }
 
-            var trainer = new Trainer()
-            {
-                FullName = model.FullName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                ImageUrl = model.ImageUrl,
-                Description = model.Description,
-                SportId = model.SportId,
-                UserId = userId
-            };
+            var trainer = mapper.Map<Trainer>(model);
+
+            trainer.UserId = userId;
 
             context.Trainers.Add(trainer);
             context.SaveChanges();
@@ -121,15 +110,7 @@
             var trainer = context.Trainers
                 .FirstOrDefault(t => t.Id == id);
 
-            var model = new BecomeTrainerFormModel
-            {
-                FullName = trainer.FullName,
-                Email = trainer.Email,
-                ImageUrl = trainer.ImageUrl,
-                PhoneNumber = trainer.PhoneNumber,
-                Description = trainer.Description,
-                SportId = trainer.SportId
-            };
+            var model = mapper.Map<BecomeTrainerFormModel>(trainer);
 
             return model;
         }
@@ -138,14 +119,8 @@
         {
             var trainer = context.Trainers
                 .Where(t => t.Id == id)
-                .Select(t => new TrainerDetailsViewModel
-                {
-                    Id = t.Id,
-                    FullName = t.FullName,
-                    ImageUrl = t.ImageUrl,
-                    Description = t.Description,
-                    Sport = t.Sport.Name
-                }).First();
+                .ProjectTo<TrainerDetailsViewModel>(mapper.ConfigurationProvider)
+                .First();
 
             return trainer;
         }

@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Sports
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Sports;
@@ -9,10 +11,12 @@
     public class SportsService : ISportsService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public SportsService(ApplicationDbContext context)
+        public SportsService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<SportsListingViewModel> All(AllSportsQueryModel query)
@@ -36,24 +40,15 @@
             var sports = sportsQuery
                 .Skip((query.CurrentPage - 1) * AllSportsQueryModel.SportsPerPage)
                 .Take(AllSportsQueryModel.SportsPerPage)
-                .Select(s => new SportsListingViewModel
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Origin = s.Origin
-                }).ToList();
+                .ProjectTo<SportsListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
             return sports;
         }
 
         public void Create(SportsFormModel model)
         {
-            var sport = new Sport()
-            {
-                Name = model.Name,
-                Origin = model.Origin,
-                Description = model.Description
-            };
+            var sport = mapper.Map<Sport>(model);
 
             context.Sports.Add(sport);
 
@@ -91,12 +86,7 @@
 
         public SportsFormModel EditConvert(SportsDetailsViewModel sport)
         {
-            var model = new SportsFormModel
-            {
-                Name = sport.Name,
-                Origin = sport.Origin,
-                Description = sport.Description
-            };
+            var model = mapper.Map<SportsFormModel>(sport);
 
             return model;
         }
@@ -104,12 +94,8 @@
         public SportsDetailsViewModel GetSport(int id)
             => context.Sports
                 .Where(s => s.Id == id)
-                .Select(s => new SportsDetailsViewModel
-                {
-                    Name = s.Name,
-                    Origin = s.Origin,
-                    Description = s.Description
-                }).First();
+                .ProjectTo<SportsDetailsViewModel>(mapper.ConfigurationProvider)
+                .First();
 
         public int TotalSports()
             => context.Sports.Count();

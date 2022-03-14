@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using AutoMapper;
     using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Trainers;
     using FitnessSite.Services.Trainers;
@@ -9,10 +10,12 @@
     public class TrainersController : Controller
     {
         private readonly ITrainersService service;
+        private readonly IMapper mapper;
 
-        public TrainersController(ITrainersService service)
+        public TrainersController(ITrainersService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllTrainersQueryModel query)
@@ -23,14 +26,13 @@
 
             var sports = service.AllSports();
 
-            return this.View(new AllTrainersQueryModel
-            {
-                SearchTerm = query.SearchTerm,
-                Sorting = query.Sorting,
-                TotalTrainers = trainersCount,
-                Sports = sports,
-                Trainers = trainers
-            });
+            var trainersForm = mapper.Map<AllTrainersQueryModel>(query);
+
+            trainersForm.Sports = sports;
+            trainersForm.Trainers = trainers;
+            trainersForm.TotalTrainers = trainersCount;
+
+            return this.View(trainersForm);
         }
 
         [Authorize]
@@ -89,7 +91,7 @@
         }
 
         [Authorize]
-        public IActionResult MyProfile()
+        public IActionResult MyProfile(string userId)
         {
             var trainerId = service.MyProfile(this.User.Id());
 
@@ -134,7 +136,7 @@
                 return BadRequest();
             }
 
-            return this.RedirectToAction("MyProfile", "Trainers");
+            return this.RedirectToAction("All", "Trainers");
         }
 
         public IActionResult Delete(int id)

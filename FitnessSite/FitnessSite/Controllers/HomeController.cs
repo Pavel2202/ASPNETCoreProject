@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using AutoMapper;
     using FitnessSite.Models;
     using FitnessSite.Models.Home;
     using FitnessSite.Models.Products;
@@ -22,7 +23,7 @@
         private readonly IHomeService service;
         private readonly IMemoryCache cache;
 
-        public HomeController(IHomeService service, IMemoryCache cache)
+        public HomeController(IHomeService service, IMemoryCache cache, IMapper mapper)
         {
             this.service = service;
             this.cache = cache;

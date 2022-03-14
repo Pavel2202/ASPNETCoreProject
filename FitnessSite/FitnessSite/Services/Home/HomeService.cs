@@ -1,5 +1,7 @@
 ﻿namespace FitnessSite.Services.Home
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Models.Products;
     using FitnessSite.Models.Recipes;
@@ -11,34 +13,25 @@
     public class HomeService : IHomeService
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public HomeService(ApplicationDbContext context)
+        public HomeService(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<TrainerListingViewModel> BestTrainers()
             => context.Trainers
                 .OrderByDescending(t => t.Customers.Count)
-                .Select(t => new TrainerListingViewModel
-                {
-                    Id = t.Id,
-                    FullName = t.FullName,
-                    Sport = t.Sport.Name,
-                    ImageUrl = t.ImageUrl
-                }).Take(3)
-            .ToList();
+                .Take(3)
+                .ProjectTo<TrainerListingViewModel>(mapper.ConfigurationProvider)
+                .ToList();
 
         public ProductListingViewModel DailyProduct()
         {
             var allProducts = context.Products
-                .Select(p => new ProductListingViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl
-                })
+                .ProjectTo<ProductListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             Random random = new Random();
@@ -53,12 +46,7 @@
         public RecipeListingViewModel DailyRecipe()
         {
             var allRecipes = context.Recipes
-                .Select(r => new RecipeListingViewModel
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    ImageUrl = r.ImageUrl
-                })
+                .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             Random random = new Random();

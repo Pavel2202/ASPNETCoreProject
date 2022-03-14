@@ -1,5 +1,6 @@
 ﻿namespace FitnessSite.Controllers
 {
+    using AutoMapper;
     using FitnessSite.Infrastructure.Extensions;
     using FitnessSite.Models.Sports;
     using FitnessSite.Services.Sports;
@@ -9,10 +10,12 @@
     public class SportsController : Controller
     {
         private readonly ISportsService service;
+        private readonly IMapper mapper;
 
-        public SportsController(ISportsService service)
+        public SportsController(ISportsService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllSportsQueryModel query)
@@ -21,14 +24,12 @@
 
             var totalSports = service.TotalSports();
 
-            return this.View(new AllSportsQueryModel
-            {
-                Sports = sports,
-                SearchTerm = query.SearchTerm,
-                CurrentPage = query.CurrentPage,
-                TotalSports = totalSports,
-                Sorting = query.Sorting
-            });
+            var sportsModel = this.mapper.Map<AllSportsQueryModel>(query);
+
+            sportsModel.Sports = sports;
+            sportsModel.TotalSports = totalSports;
+
+            return this.View(sportsModel);
         }
 
         [Authorize]
@@ -99,7 +100,7 @@
                 return BadRequest();
             }
 
-            return this.RedirectToAction("Details", new { id });
+            return this.RedirectToAction("Details", new { id, information = model.SportInformation() });
         }
 
         [Authorize]
