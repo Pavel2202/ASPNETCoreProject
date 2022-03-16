@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using static WebConstants;
+
     public class ProductsController : Controller
     {
         private readonly IProductsService service;
@@ -57,6 +59,8 @@
 
             service.CreateProduct(model);
 
+            TempData[GlobalMessageKey] = "You successfully added a product!";
+
             return this.RedirectToAction("All", "Products");
         }
 
@@ -103,6 +107,8 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "You successfully edited a product!";
+
             return this.RedirectToAction("Details", new { id, information = product.ProductInformation() });
         }
 
@@ -116,6 +122,8 @@
 
             service.Delete(id);
 
+            TempData[GlobalMessageKey] = "You successfully deleted a product!";
+
             return this.RedirectToAction("All", "Products");
         }
 
@@ -123,6 +131,8 @@
         public IActionResult AddToCart(int id)
         {
             service.AddToCart(id, this.User.Id());
+
+            TempData[GlobalMessageKey] = "You successfully added a product to your cart!";
 
             return this.RedirectToAction("All", "Products");
         }

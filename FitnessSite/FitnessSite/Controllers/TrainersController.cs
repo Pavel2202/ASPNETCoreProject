@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using static WebConstants;
+
     public class TrainersController : Controller
     {
         private readonly ITrainersService service;
@@ -62,6 +64,8 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "Thank you for becoming a trainer!";
+
             return this.RedirectToAction("All", "Trainers");
         }
 
@@ -86,6 +90,8 @@
             {
                 return BadRequest();
             }
+
+            TempData[GlobalMessageKey] = "You successfully hired a trainer!";
 
             return this.RedirectToAction("All", "Trainers");
         }
@@ -136,6 +142,8 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "You successfully edited a trainer!";
+
             return this.RedirectToAction("All", "Trainers");
         }
 
@@ -147,6 +155,8 @@
             }
 
             service.Delete(id);
+
+            TempData[GlobalMessageKey] = "You successfully deleted a trainer!";
 
             return this.RedirectToAction("All", "Trainers");
         }

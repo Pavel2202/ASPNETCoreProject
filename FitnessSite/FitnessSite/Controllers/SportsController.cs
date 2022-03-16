@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using static WebConstants;
+
     public class SportsController : Controller
     {
         private readonly ISportsService service;
@@ -54,6 +56,8 @@
 
             service.Create(model);
 
+            TempData[GlobalMessageKey] = "You successfully added a sport!";
+
             return this.RedirectToAction("All", "Sports");
         }
 
@@ -100,6 +104,8 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "You successfully edited a sport!";
+
             return this.RedirectToAction("Details", new { id, information = model.SportInformation() });
         }
 
@@ -112,6 +118,8 @@
             }
 
             service.Delete(id);
+
+            TempData[GlobalMessageKey] = "You successfully deleted a sport!";
 
             return this.RedirectToAction("All", "Sports");
         }

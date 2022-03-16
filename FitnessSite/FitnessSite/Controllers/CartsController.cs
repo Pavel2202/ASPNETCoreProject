@@ -4,7 +4,8 @@
     using FitnessSite.Services.Carts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+
+    using static WebConstants;
 
     public class CartsController : Controller
     {
@@ -28,6 +29,8 @@
         {
             service.Remove(id);
 
+            TempData[GlobalMessageKey] = "You successfully removed an item!";
+
             return this.RedirectToAction("MyCart", "Carts");
         }
 
@@ -36,6 +39,8 @@
         {
             service.Buy(this.User.Id());
 
+            TempData[GlobalMessageKey] = "Your order was successful!";
+
             return this.RedirectToAction("MyCart", "Carts");
         }
 
@@ -43,6 +48,8 @@
         public IActionResult Clear()
         {
             service.Clear(this.User.Id());
+
+            TempData[GlobalMessageKey] = "You successfully cleared your cart!";
 
             return this.RedirectToAction("MyCart", "Carts");
         }

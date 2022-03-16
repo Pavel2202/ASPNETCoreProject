@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using static WebConstants;
+
     public class RecipesController : Controller
     {
         private readonly IRecipeService service;
@@ -66,6 +68,8 @@
 
             service.CreateRecipe(recipe, this.User.Id());
 
+            TempData[GlobalMessageKey] = "You successfully added a recipe!";
+
             return this.RedirectToAction("All", "Recipes");
         }
 
@@ -102,6 +106,8 @@
 
             var recipe = service.GetRecipe(id);
 
+            TempData[GlobalMessageKey] = "You successfully edited a recipe!";
+
             return RedirectToAction("Details", new { id, information = recipe.RecipeInformation() });
         }
 
@@ -114,6 +120,8 @@
             }
 
             service.Delete(id);
+
+            TempData[GlobalMessageKey] = "You successfully deleted a recipe!";
 
             return this.RedirectToAction("Mine", "Recipes");
         }
