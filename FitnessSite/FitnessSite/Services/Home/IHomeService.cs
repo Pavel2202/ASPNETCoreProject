@@ -7,7 +7,7 @@
 
     public interface IHomeService
     {
-        IEnumerable<TrainerListingViewModel> BestTrainers();
+        TrainerListingViewModel BestTrainer();
 
         RecipeListingViewModel DailyRecipe();
 

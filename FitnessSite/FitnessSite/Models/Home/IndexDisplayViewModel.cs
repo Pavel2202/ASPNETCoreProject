@@ -11,6 +11,6 @@
 
         public ProductListingViewModel Product { get; set; }
 
-        public List<TrainerListingViewModel> Trainers { get; set; }
+        public TrainerListingViewModel Trainer { get; set; }
     }
 }

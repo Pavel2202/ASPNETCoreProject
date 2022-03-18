@@ -21,12 +21,11 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<TrainerListingViewModel> BestTrainers()
+        public TrainerListingViewModel BestTrainer()
             => context.Trainers
                 .OrderByDescending(t => t.Customers.Count)
-                .Take(3)
                 .ProjectTo<TrainerListingViewModel>(mapper.ConfigurationProvider)
-                .ToList();
+                .FirstOrDefault();
 
         public ProductListingViewModel DailyProduct()
         {
@@ -36,7 +35,7 @@
 
             Random random = new Random();
 
-            var productIndex = random.Next(0, allProducts.Count);;
+            var productIndex = random.Next(0, allProducts.Count);
 
             var product = allProducts[productIndex];
 

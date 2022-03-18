@@ -34,14 +34,13 @@
             var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromDays(1));
 
-            var trainers = this.cache.Get<List<TrainerListingViewModel>>(BestTrainersCacheKey);
+            var trainer = this.cache.Get<TrainerListingViewModel>(BestTrainerCacheKey);
 
-            if (trainers == null)
+            if (trainer == null)
             {
-                trainers = service.BestTrainers()
-                    .ToList();               
+                trainer = service.BestTrainer();               
 
-                this.cache.Set(BestTrainersCacheKey, trainers, cacheOptions);
+                this.cache.Set(BestTrainerCacheKey, trainer, cacheOptions);
             }
 
             var recipe = this.cache.Get<RecipeListingViewModel>(DailyRecipeCacheKey);
@@ -66,7 +65,7 @@
             {
                 Recipe = recipe,
                 Product = product,
-                Trainers = trainers
+                Trainer = trainer
             };
 
             return View(model);

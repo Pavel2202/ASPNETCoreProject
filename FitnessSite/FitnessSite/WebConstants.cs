@@ -6,7 +6,7 @@
 
         public class Cache
         {
-            public const string BestTrainersCacheKey = nameof(BestTrainersCacheKey);
+            public const string BestTrainerCacheKey = nameof(BestTrainerCacheKey);
 
             public const string DailyRecipeCacheKey = nameof(DailyRecipeCacheKey);
 
