@@ -28,7 +28,7 @@ namespace FitnessSite
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDbContext<ApplicationDbContext>(options => options
+                .AddDbContext<FitnessSiteDbContext>(options => options
                     .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -55,7 +55,7 @@ namespace FitnessSite
                     options.Password.RequireUppercase = false;
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<FitnessSiteDbContext>();
 
             services.AddAutoMapper(typeof(Startup));
 

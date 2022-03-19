@@ -30,6 +30,8 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        public bool IsPublic { get; set; }
+
         [Required]
         public string Description { get; set; }
 
@@ -41,8 +43,6 @@
 
         [Required]
         public string UserId { get; set; }
-
-        public User User { get; set; }
 
         public ICollection<User> Customers { get; set; }
     }

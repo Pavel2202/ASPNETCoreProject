@@ -7,9 +7,9 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class FitnessSiteDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public FitnessSiteDbContext(DbContextOptions<FitnessSiteDbContext> options)
             : base(options)
         {
         }

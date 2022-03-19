@@ -11,10 +11,10 @@
 
     public class ProductsService : IProductsService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public ProductsService(ApplicationDbContext context, IMapper mapper)
+        public ProductsService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -42,7 +42,9 @@
 
         public IEnumerable<ProductListingViewModel> AllProducts(AllProductsQueryModel query)
         {
-            var productsQuery = context.Products.AsQueryable();
+            var productsQuery = context.Products
+                .Where(p => p.IsPublic)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.Type))
             {

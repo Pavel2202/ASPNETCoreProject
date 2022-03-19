@@ -21,7 +21,7 @@
         public const int SportDescriptionMinLength = 20;
 
         public const int ProductNameMinLength = 5;
-        public const int ProductNameMaxLength = 30;
+        public const int ProductNameMaxLength = 80;
         public const double ProductPriceMinValue = 0.01;
         public const double ProductPriceMaxValue = 1000;
         public const int ProductDescriptionMinLength = 20;

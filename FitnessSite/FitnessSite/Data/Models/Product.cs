@@ -24,6 +24,8 @@
         [Required]
         public string Description { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public int? CartId { get; set; }
 
         public Cart Cart { get; set; }

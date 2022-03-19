@@ -5,9 +5,16 @@
 
     public interface IRecipeService
     {
-        IEnumerable<RecipeListingViewModel> AllRecipes(AllRecipesQueryModel query);
+        IEnumerable<RecipeListingViewModel> AllRecipes(
+            string searchTerm = null,
+            RecipeSorting sorting = RecipeSorting.DateCreated,
+            int currentPage = 1,
+            int recipesPerPage = int.MaxValue,
+            bool isPublic = true);
 
         void CreateRecipe(RecipeFormModel recipe, string userId);
+
+        int PublicRecipes();
 
         int TotalRecipes();
 
@@ -22,5 +29,7 @@
         RecipeFormModel EditConvert(RecipeDetailsViewModel recipe);
 
         void Delete(int recipeId);
+
+        void ChangeVisibility(int id);
     }
 }

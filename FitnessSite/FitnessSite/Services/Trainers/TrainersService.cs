@@ -10,10 +10,10 @@
 
     public class TrainersService : ITrainersService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public TrainersService(ApplicationDbContext context, IMapper mapper)
+        public TrainersService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -26,7 +26,9 @@
 
         public IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query)
         {
-            var trainersQuery = context.Trainers.AsQueryable();
+            var trainersQuery = context.Trainers
+                .Where(t => t.IsPublic)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.Sport))
             {
@@ -72,6 +74,13 @@
             context.Trainers.Add(trainer);
             context.SaveChanges();
 
+            var user = context.Users
+                .FirstOrDefault(u => u.Id == userId);
+
+            user.TrainerId = trainer.Id;
+
+            context.SaveChanges();
+
             return true;
         }
 
@@ -79,7 +88,12 @@
         {
             var trainer = context.Trainers.FirstOrDefault(t => t.Id == id);
 
+            var user = context.Users
+                .FirstOrDefault(u => u.TrainerId == trainer.Id);
+
             context.Trainers.Remove(trainer);
+
+            user.TrainerId = null;
 
             context.SaveChanges();
         }

@@ -11,33 +11,41 @@
 
     public class RecipeService : IRecipeService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public RecipeService(ApplicationDbContext context, IMapper mapper)
+        public RecipeService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public IEnumerable<RecipeListingViewModel> AllRecipes(AllRecipesQueryModel query)
+        public IEnumerable<RecipeListingViewModel> AllRecipes(
+            string searchTerm = null,
+            RecipeSorting sorting = RecipeSorting.DateCreated,
+            int currentPage = 1,
+            int recipesPerPage = int.MaxValue,
+            bool isPublic = true
+            )
         {
-            var recipesQuery = context.Recipes.AsQueryable();
+            var recipesQuery = context.Recipes
+                .Where(r => !isPublic || r.IsPublic)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 recipesQuery = recipesQuery.Where(r =>
-                    r.Title.ToLower().Contains(query.SearchTerm.ToLower()));
+                    r.Title.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            recipesQuery = query.Sorting switch
+            recipesQuery = sorting switch
             {
                 RecipeSorting.Title => recipesQuery.OrderByDescending(r => r.Title),
                 RecipeSorting.DateCreated or _ => recipesQuery.OrderByDescending(r => r.Id)
             };
 
             var recipes = recipesQuery
-                .Skip((query.CurrentPage - 1) * AllRecipesQueryModel.RecipesPerPage)
+                .Skip((currentPage - 1) * AllRecipesQueryModel.RecipesPerPage)
                 .Take(AllRecipesQueryModel.RecipesPerPage)
                 .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
@@ -45,11 +53,23 @@
             return recipes;
         }
 
+        public void ChangeVisibility(int id)
+        {
+            var recipe = context.Recipes
+                .FirstOrDefault(r => r.Id == id);
+
+            var state = recipe.IsPublic;
+
+            recipe.IsPublic = !state;
+
+            context.SaveChanges();
+        }
+
         public void CreateRecipe(RecipeFormModel model, string userId)
         {
             var recipe = mapper.Map<Recipe>(model);
 
-            recipe.CreatorId = userId;           
+            recipe.CreatorId = userId;
 
             context.Recipes.Add(recipe);
 
@@ -83,6 +103,8 @@
             recipe.Title = model.Title;
             recipe.Description = model.Description;
             recipe.ImageUrl = model.ImageUrl;
+
+            recipe.IsPublic = false;
 
             context.SaveChanges();
 
@@ -130,7 +152,13 @@
                 .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
+        public int PublicRecipes()
+            => context.Recipes
+            .Where(c => c.IsPublic)
+            .Count();
+
         public int TotalRecipes()
             => context.Recipes.Count();
+
     }
 }

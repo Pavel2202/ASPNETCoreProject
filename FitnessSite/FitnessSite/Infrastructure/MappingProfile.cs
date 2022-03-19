@@ -16,6 +16,7 @@
             this.CreateMap<Product, ProductListingViewModel>();
             this.CreateMap<ProductDetailsViewModel, ProductFormModel>();
             this.CreateMap<Product, ProductDetailsViewModel>();
+            this.CreateMap<ProductFormModel, Product>();
 
             this.CreateMap<Recipe, RecipeListingViewModel>();
             this.CreateMap<Recipe, RecipeDetailsViewModel>();

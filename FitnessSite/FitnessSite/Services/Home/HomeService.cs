@@ -12,10 +12,10 @@
 
     public class HomeService : IHomeService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public HomeService(ApplicationDbContext context, IMapper mapper)
+        public HomeService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -23,6 +23,7 @@
 
         public TrainerListingViewModel BestTrainer()
             => context.Trainers
+                .Where(t => t.IsPublic)
                 .OrderByDescending(t => t.Customers.Count)
                 .ProjectTo<TrainerListingViewModel>(mapper.ConfigurationProvider)
                 .FirstOrDefault();
@@ -30,6 +31,7 @@
         public ProductListingViewModel DailyProduct()
         {
             var allProducts = context.Products
+                .Where(p => p.IsPublic)
                 .ProjectTo<ProductListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
@@ -45,6 +47,7 @@
         public RecipeListingViewModel DailyRecipe()
         {
             var allRecipes = context.Recipes
+                .Where(r => r.IsPublic)
                 .ProjectTo<RecipeListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 

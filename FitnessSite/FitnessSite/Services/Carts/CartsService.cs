@@ -9,10 +9,10 @@
 
     public class CartsService : ICartsService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public CartsService(ApplicationDbContext context, IMapper mapper)
+        public CartsService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;

@@ -10,10 +10,10 @@
 
     public class SportsService : ISportsService
     {
-        private readonly ApplicationDbContext context;
+        private readonly FitnessSiteDbContext context;
         private readonly IMapper mapper;
 
-        public SportsService(ApplicationDbContext context, IMapper mapper)
+        public SportsService(FitnessSiteDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -21,7 +21,9 @@
 
         public IEnumerable<SportsListingViewModel> All(AllSportsQueryModel query)
         {
-            var sportsQuery = context.Sports.AsQueryable();
+            var sportsQuery = context.Sports
+                .Where(s => s.IsPublic)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
@@ -49,6 +51,8 @@
         public void Create(SportsFormModel model)
         {
             var sport = mapper.Map<Sport>(model);
+
+            sport.IsPublic = true;
 
             context.Sports.Add(sport);
 

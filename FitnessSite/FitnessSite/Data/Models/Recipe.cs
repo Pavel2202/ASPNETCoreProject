@@ -19,6 +19,8 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        public bool IsPublic { get; set; }
+
         [Required]
         public string CreatorId { get; set; }
 

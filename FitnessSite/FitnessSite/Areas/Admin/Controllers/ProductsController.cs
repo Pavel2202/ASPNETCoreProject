@@ -1,6 +1,7 @@
 ﻿namespace FitnessSite.Areas.Admin.Controllers
 {
     using FitnessSite.Services.Recipes;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class ProductsController : AdminController

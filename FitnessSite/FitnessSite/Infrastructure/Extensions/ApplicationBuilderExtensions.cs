@@ -29,7 +29,7 @@
 
         private static void MigrateDatabase(IServiceProvider services)
         {
-            var data = services.GetRequiredService<ApplicationDbContext>();
+            var data = services.GetRequiredService<FitnessSiteDbContext>();
 
             data.Database.Migrate();
         }

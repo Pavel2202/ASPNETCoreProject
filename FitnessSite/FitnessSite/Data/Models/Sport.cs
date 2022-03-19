@@ -17,6 +17,8 @@
         [MaxLength(SportOriginMaxLength)]
         public string Origin { get; set; }
 
+        public bool IsPublic { get; set; }
+
         [Required]
         public string Description { get; set; }
     }

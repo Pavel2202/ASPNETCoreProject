@@ -22,12 +22,17 @@
 
         public IActionResult All([FromQuery] AllRecipesQueryModel query)
         {
-            var recipes = service.AllRecipes(query);
+            var recipes = service.AllRecipes(
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage, 
+                AllRecipesQueryModel.RecipesPerPage);               
 
-            var totalRecipes = service.TotalRecipes();
+            var totalRecipes = service.PublicRecipes();
 
             var recipeForm = this.mapper.Map<AllRecipesQueryModel>(query);
 
+            recipeForm.TotalRecipes = totalRecipes;
             recipeForm.Recipes = recipes;
 
             return this.View(recipeForm);
@@ -123,7 +128,7 @@
 
             TempData[GlobalMessageKey] = "You successfully deleted a recipe!";
 
-            return this.RedirectToAction("Mine", "Recipes");
+            return this.RedirectToAction("All", "Recipes");
         }
     }
 }
