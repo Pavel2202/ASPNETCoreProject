@@ -19,20 +19,25 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<SportsListingViewModel> All(AllSportsQueryModel query)
+        public IEnumerable<SportsListingViewModel> All(
+            string searchTerm = null,
+            SportSorting sorting = SportSorting.DateCreated,
+            int currentPage = 1,
+            int sportsPerPage = int.MaxValue,
+            bool isPublic = true)
         {
             var sportsQuery = context.Sports
-                .Where(s => s.IsPublic)
+                .Where(s => !isPublic || s.IsPublic)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 sportsQuery = sportsQuery.Where(s =>
-                    s.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                    s.Origin.ToLower().Contains(query.SearchTerm.ToLower()));
+                    s.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                    s.Origin.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            sportsQuery = query.Sorting switch
+            sportsQuery = sorting switch
             {
                 SportSorting.Name => sportsQuery.OrderByDescending(r => r.Name),
                 SportSorting.Origin => sportsQuery.OrderByDescending(r => r.Origin),
@@ -40,12 +45,24 @@
             };
 
             var sports = sportsQuery
-                .Skip((query.CurrentPage - 1) * AllSportsQueryModel.SportsPerPage)
+                .Skip((currentPage - 1) * AllSportsQueryModel.SportsPerPage)
                 .Take(AllSportsQueryModel.SportsPerPage)
                 .ProjectTo<SportsListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             return sports;
+        }
+
+        public void ChangeVisibility(int id)
+        {
+            var sport = context.Sports
+                .FirstOrDefault(s => s.Id == id);
+
+            var state = sport.IsPublic;
+
+            sport.IsPublic = !state;
+
+            context.SaveChanges();
         }
 
         public void Create(SportsFormModel model)
@@ -82,6 +99,7 @@
             sport.Name = model.Name;
             sport.Origin = model.Origin;
             sport.Description = model.Description;
+            sport.IsPublic = false;
 
             context.SaveChanges();
 

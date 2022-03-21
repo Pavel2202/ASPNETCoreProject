@@ -7,5 +7,7 @@
         public string Name { get; set; }
 
         public string Origin { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

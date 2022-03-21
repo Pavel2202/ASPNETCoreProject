@@ -7,7 +7,12 @@
     {
         void CreateProduct(ProductFormModel model);
 
-        IEnumerable<ProductListingViewModel> AllProducts(AllProductsQueryModel query);
+        IEnumerable<ProductListingViewModel> AllProducts(string searchTerm = null,
+            string type = null,
+            ProductSorting sorting = ProductSorting.DateCreated,
+            int currentPage = 1,
+            int productsPerPage = int.MaxValue,
+            bool isPublic = true);
 
         int TotalProducts();
 
@@ -22,5 +27,7 @@
         void Delete(int id);
 
         void AddToCart(int productId, string userId);
+
+        void ChangeVisibility(int id);
     }
 }

@@ -5,7 +5,11 @@
 
     public interface ISportsService
     {
-        IEnumerable<SportsListingViewModel> All(AllSportsQueryModel query);
+        IEnumerable<SportsListingViewModel> All(string searchTerm = null,
+            SportSorting sorting = SportSorting.DateCreated,
+            int currentPage = 1,
+            int sportsPerPage = int.MaxValue,
+            bool isPublic = true);
 
         int TotalSports();
 
@@ -18,5 +22,7 @@
         bool Edit(int id, SportsFormModel model);
 
         void Delete(int id);
+
+        void ChangeVisibility(int id);
     }
 }

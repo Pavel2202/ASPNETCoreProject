@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using static WebConstants;
+    using static Areas.Admin.AdminConstants;
 
     public class SportsController : Controller
     {
@@ -22,7 +23,12 @@
 
         public IActionResult All([FromQuery] AllSportsQueryModel query)
         {
-            var sports = service.All(query);
+            var sports = service.All(
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllSportsQueryModel.SportsPerPage
+                );
 
             var totalSports = service.TotalSports();
 
@@ -35,6 +41,7 @@
         }
 
         [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add()
         {
             if (!this.User.IsAdmin())
@@ -46,7 +53,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add(SportsFormModel model)
         {
             if (!ModelState.IsValid)

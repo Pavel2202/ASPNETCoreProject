@@ -7,10 +7,10 @@
     {
         public const int TrainersPerPage = 6;
 
-        public string Sport { get; set; }
-
         [Display(Name = "Search")]
         public string SearchTerm { get; set; }
+
+        public string Sport { get; set; }
 
         public TrainerSorting Sorting { get; set; }
 

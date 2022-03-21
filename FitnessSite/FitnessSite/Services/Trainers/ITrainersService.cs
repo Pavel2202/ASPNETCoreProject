@@ -9,7 +9,13 @@
 
         bool Create(BecomeTrainerFormModel model, string userId);
 
-        IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query);
+        IEnumerable<TrainerListingViewModel> AllTrainers(
+            string searchTerm = null,
+            string sport = null,
+            TrainerSorting sorting = TrainerSorting.DateCreated,
+            int currentPage = 1,
+            int trainersPerPage = int.MaxValue,
+            bool isPublic = true);
 
         int TotalTrainers();
 
@@ -28,5 +34,7 @@
         void Delete(int id);
 
         bool IsUserTrainer(string userId);
+
+        void ChangeVisibility(int id);
     }
 }

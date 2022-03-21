@@ -40,26 +40,32 @@
             context.SaveChanges();
         }
 
-        public IEnumerable<ProductListingViewModel> AllProducts(AllProductsQueryModel query)
+        public IEnumerable<ProductListingViewModel> AllProducts(
+            string searchTerm = null,
+            string type = null,
+            ProductSorting sorting = ProductSorting.DateCreated,
+            int currentPage = 1,
+            int productsPerPage = int.MaxValue,
+            bool isPublic = true)
         {
             var productsQuery = context.Products
-                .Where(p => p.IsPublic)
+                .Where(p => !isPublic || p.IsPublic)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.Type))
+            if (!string.IsNullOrWhiteSpace(type))
             {
-                var type = Enum.Parse(typeof(ProductType), query.Type);
+                var typeEnum = Enum.Parse(typeof(ProductType), type);
 
-                productsQuery = productsQuery.Where(p => p.Type == (ProductType)type);
+                productsQuery = productsQuery.Where(p => p.Type == (ProductType)typeEnum);
             }
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 productsQuery = productsQuery.Where(r =>
-                    r.Name.ToLower().Contains(query.SearchTerm.ToLower()));
+                    r.Name.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            productsQuery = query.Sorting switch
+            productsQuery = sorting switch
             {
                 ProductSorting.Title => productsQuery.OrderByDescending(p => p.Name),
                 ProductSorting.Type => productsQuery.OrderByDescending(p => p.Type),
@@ -68,7 +74,7 @@
             };
 
             var products = productsQuery
-                .Skip((query.CurrentPage - 1) * AllProductsQueryModel.ProductsPerPage)
+                .Skip((currentPage - 1) * AllProductsQueryModel.ProductsPerPage)
                 .Take(AllProductsQueryModel.ProductsPerPage)
                 .ProjectTo<ProductListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
@@ -86,6 +92,18 @@
             return types;
         }
 
+        public void ChangeVisibility(int id)
+        {
+            var product = context.Products
+                .FirstOrDefault(p => p.Id == id);
+
+            var state = product.IsPublic;
+
+            product.IsPublic = !state;
+
+            context.SaveChanges();
+        }
+
         public void CreateProduct(ProductFormModel model)
         {
             var type = Enum.Parse(typeof(ProductType), model.Type);
@@ -93,6 +111,8 @@
             var product = mapper.Map<Product>(model);
 
             product.Type = (ProductType)type;
+
+            product.IsPublic = true;
 
             context.Products.Add(product);
             context.SaveChanges();
@@ -126,6 +146,7 @@
             product.Price = model.Price;
             product.ImageUrl = model.ImageUrl;
             product.Description = model.Description;
+            product.IsPublic = false;
 
             var type = Enum.Parse(typeof(ProductType), model.Type);
 

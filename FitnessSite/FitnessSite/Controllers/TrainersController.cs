@@ -22,7 +22,12 @@
 
         public IActionResult All([FromQuery] AllTrainersQueryModel query)
         {
-            var trainers = service.AllTrainers(query);
+            var trainers = service.AllTrainers(
+                query.SearchTerm,
+                query.Sport,
+                query.Sorting,
+                query.CurrentPage,
+                AllTrainersQueryModel.TrainersPerPage);
 
             var trainersCount = service.TotalTrainers();
 

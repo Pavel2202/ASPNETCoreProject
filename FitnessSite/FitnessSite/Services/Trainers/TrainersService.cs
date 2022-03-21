@@ -21,29 +21,36 @@
 
         public IEnumerable<TrainerSportsViewModel> AllSports()
             => context.Sports
+                .Where(s => s.IsPublic)
                 .ProjectTo<TrainerSportsViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
-        public IEnumerable<TrainerListingViewModel> AllTrainers(AllTrainersQueryModel query)
+        public IEnumerable<TrainerListingViewModel> AllTrainers(
+            string searchTerm = null,
+            string sport = null,
+            TrainerSorting sorting = TrainerSorting.DateCreated,
+            int currentPage = 1,
+            int trainersPerPage = int.MaxValue,
+            bool isPublic = true)
         {
             var trainersQuery = context.Trainers
-                .Where(t => t.IsPublic)
+                .Where(t => !isPublic || t.IsPublic)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.Sport))
+            if (!string.IsNullOrWhiteSpace(sport))
             {
                 trainersQuery = trainersQuery.Where(t =>
-                    t.Sport.Id == int.Parse(query.Sport));
+                    t.Sport.Id == int.Parse(sport));
             }
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 trainersQuery = trainersQuery.Where(t =>
-                    t.FullName.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                    t.Sport.Name.ToLower().Contains(query.SearchTerm.ToLower()));
+                    t.FullName.ToLower().Contains(searchTerm.ToLower()) ||
+                    t.Sport.Name.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            trainersQuery = query.Sorting switch
+            trainersQuery = sorting switch
             {
                 TrainerSorting.FullName => trainersQuery.OrderByDescending(t => t.FullName),
                 TrainerSorting.Customers => trainersQuery.OrderByDescending(t => t.Customers.Count),
@@ -52,12 +59,24 @@
             };
 
             var trainers = trainersQuery
-                .Skip((query.CurrentPage - 1) * AllTrainersQueryModel.TrainersPerPage)
+                .Skip((currentPage - 1) * AllTrainersQueryModel.TrainersPerPage)
                 .Take(AllTrainersQueryModel.TrainersPerPage)
                 .ProjectTo<TrainerListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             return trainers;
+        }
+
+        public void ChangeVisibility(int id)
+        {
+            var trainer = context.Trainers
+                .FirstOrDefault(t => t.Id == id);
+
+            var state = trainer.IsPublic;
+
+            trainer.IsPublic = !state;
+
+            context.SaveChanges();
         }
 
         public bool Create(BecomeTrainerFormModel model, string userId)
@@ -113,6 +132,7 @@
             trainer.PhoneNumber = model.PhoneNumber;
             trainer.ImageUrl = model.ImageUrl;
             trainer.SportId = model.SportId;
+            trainer.IsPublic = false;
 
             context.SaveChanges();
 

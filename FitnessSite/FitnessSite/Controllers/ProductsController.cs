@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using static WebConstants;
+    using static Areas.Admin.AdminConstants;
 
     public class ProductsController : Controller
     {
@@ -22,7 +23,13 @@
 
         public IActionResult All([FromQuery] AllProductsQueryModel query)
         {
-            var products = service.AllProducts(query);
+            var products = service.AllProducts(
+                query.SearchTerm,
+                query.Type,
+                query.Sorting,
+                query.CurrentPage,
+                AllProductsQueryModel.ProductsPerPage
+                );
 
             var totalProducts = service.TotalProducts();
 
@@ -37,7 +44,7 @@
             return this.View(productForm);
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add()
         {
             if (!this.User.IsAdmin())
@@ -49,7 +56,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add(ProductFormModel model)
         {
             if (!ModelState.IsValid)
