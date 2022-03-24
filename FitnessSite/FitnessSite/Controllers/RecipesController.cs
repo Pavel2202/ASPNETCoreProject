@@ -38,26 +38,6 @@
             return this.View(recipeForm);
         }
 
-        public IActionResult Details(int id, string information)
-        {
-            var recipe = service.GetRecipe(id);
-
-            if (information != recipe.RecipeInformation())
-            {
-                return BadRequest();
-            }
-
-            return this.View(recipe);
-        }
-
-        [Authorize]
-        public IActionResult Mine()
-        {
-            var recipes = service.MyRecipes(this.User.Id());
-
-            return this.View(recipes);
-        }
-
         [Authorize]
         public IActionResult Add()
             => this.View();
@@ -76,6 +56,18 @@
             TempData[GlobalMessageKey] = "You successfully added a recipe!";
 
             return this.RedirectToAction("All", "Recipes");
+        }
+
+        public IActionResult Details(int id, string information)
+        {
+            var recipe = service.GetRecipe(id);
+
+            if (information != recipe.RecipeInformation())
+            {
+                return BadRequest();
+            }
+
+            return this.View(recipe);
         }
 
         [Authorize]
@@ -130,5 +122,13 @@
 
             return this.RedirectToAction("All", "Recipes");
         }
+
+        [Authorize]
+        public IActionResult Mine()
+        {
+            var recipes = service.MyRecipes(this.User.Id());
+
+            return this.View(recipes);
+        }   
     }
 }

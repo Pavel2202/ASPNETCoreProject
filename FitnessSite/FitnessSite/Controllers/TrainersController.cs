@@ -87,36 +87,6 @@
         }
 
         [Authorize]
-        public IActionResult Hire(int id)
-        {
-            var hire = service.Hire(id, this.User.Id());
-
-            if (!hire)
-            {
-                return BadRequest();
-            }
-
-            TempData[GlobalMessageKey] = "You successfully hired a trainer!";
-
-            return this.RedirectToAction("All", "Trainers");
-        }
-
-        [Authorize]
-        public IActionResult MyProfile(string userId)
-        {
-            var trainerId = service.MyProfile(this.User.Id());
-
-            if (trainerId is null)
-            {
-                return this.RedirectToAction("Become", "Trainers");
-            }
-
-            var trainer = service.GetTrainer(int.Parse(trainerId));
-
-            return this.View(trainer);
-        }
-
-        [Authorize]
         public IActionResult Edit(int id)
         {
             if (!service.IsTrainer(id, this.User.Id()) && !this.User.IsAdmin())
@@ -165,5 +135,35 @@
 
             return this.RedirectToAction("All", "Trainers");
         }
+
+        [Authorize]
+        public IActionResult MyProfile(string userId)
+        {
+            var trainerId = service.MyProfile(this.User.Id());
+
+            if (trainerId is null)
+            {
+                return this.RedirectToAction("Become", "Trainers");
+            }
+
+            var trainer = service.GetTrainer(int.Parse(trainerId));
+
+            return this.View(trainer);
+        }
+
+        [Authorize]
+        public IActionResult Hire(int id)
+        {
+            var hire = service.Hire(id, this.User.Id());
+
+            if (!hire)
+            {
+                return BadRequest();
+            }
+
+            TempData[GlobalMessageKey] = "You successfully hired a trainer!";
+
+            return this.RedirectToAction("All", "Trainers");
+        }       
     }
 }

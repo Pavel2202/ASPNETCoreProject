@@ -23,7 +23,7 @@
         private readonly IHomeService service;
         private readonly IMemoryCache cache;
 
-        public HomeController(IHomeService service, IMemoryCache cache, IMapper mapper)
+        public HomeController(IHomeService service, IMemoryCache cache)
         {
             this.service = service;
             this.cache = cache;

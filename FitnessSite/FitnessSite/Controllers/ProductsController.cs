@@ -47,11 +47,6 @@
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add()
         {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
             return this.View();
         }
 
@@ -83,14 +78,9 @@
             return this.View(product);
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int id)
         {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
             var product = service.GetProduct(id);
 
             var model = service.EditConvert(product);
@@ -99,7 +89,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int id, ProductFormModel product)
         {
             if (!ModelState.IsValid)
@@ -119,14 +109,9 @@
             return this.RedirectToAction("Details", new { id, information = product.ProductInformation() });
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int id)
         {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
             service.Delete(id);
 
             TempData[GlobalMessageKey] = "You successfully deleted a product!";
