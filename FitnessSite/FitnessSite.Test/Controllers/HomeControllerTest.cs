@@ -47,6 +47,19 @@
                     .WithValueOfType<RecipeListingViewModel>()));
 
         [Fact]
+        public void IndexShouldStoreTrainerCacheCorrectly()
+            => MyController<HomeController>
+                .Instance(controller => controller
+                    .WithData(TenPublicProducts)
+                    .WithData(TenPublicRecipes)
+                    .WithData(TenPublicTrainers)
+                    .WithUser())
+                .Calling(c => c.Index())
+                .ShouldHave()
+                .MemoryCache(cache => cache
+                    .ContainingEntryWithKey(BestTrainerCacheKey));
+
+        [Fact]
         public void IndexShouldReturnView()
             => MyController<HomeController>
             .Instance(controller => controller
