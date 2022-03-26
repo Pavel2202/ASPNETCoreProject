@@ -109,7 +109,7 @@
             "https://www.silabg.com/uf/product/2945_pm_new.jpg",
             "Supplement",
             "Best protein. Buy only here.")]
-        public void PostEditShouldBeForAdminsAndReturnRedirectWithModel(
+        public void PostEditShouldBeForAdminsAndReturnRedirectWithValidModel(
             int id,
             string name,
             decimal price,
