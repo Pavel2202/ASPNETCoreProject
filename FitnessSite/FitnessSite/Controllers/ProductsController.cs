@@ -46,9 +46,7 @@
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add()
-        {
-            return this.View();
-        }
+            => this.View();
 
         [HttpPost]
         [Authorize(Roles = AdministratorRoleName)]

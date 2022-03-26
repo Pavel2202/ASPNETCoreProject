@@ -40,17 +40,9 @@
             return this.View(sportsModel);
         }
 
-        [Authorize]
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Add()
-        {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
-            return this.View();
-        }
+            => this.View();
 
         [HttpPost]
         [Authorize(Roles = AdministratorRoleName)]
@@ -80,14 +72,9 @@
             return this.View(sport);
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int id)
         {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
             var sport = service.GetSport(id);
 
             var model = service.EditConvert(sport);
@@ -96,7 +83,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int id, SportsFormModel model)
         {
             if (!ModelState.IsValid)
@@ -116,14 +103,9 @@
             return this.RedirectToAction("Details", new { id, information = model.SportInformation() });
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int id)
         {
-            if (!this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
             service.Delete(id);
 
             TempData[GlobalMessageKey] = "You successfully deleted a sport!";
