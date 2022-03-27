@@ -65,7 +65,7 @@
             => MyRouting
                 .Configuration()
                 .ShouldMap("/Trainers/MyProfile")
-                .To<TrainersController>(c => c.MyProfile(With.Any<string>()));
+                .To<TrainersController>(c => c.MyProfile());
 
         [Fact]
         public void HireShouldBeMapped()

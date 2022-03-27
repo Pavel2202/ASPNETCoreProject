@@ -79,6 +79,39 @@
                 .Redirect(redirect => redirect
                     .To<ProductsController>(c => c.All(With.Any<AllProductsQueryModel>())));
 
+        [Theory]
+        [InlineData("pr",
+            100.00,
+            "https://www.silabg.com/uf/product/2945_pm_new.jpg",
+            "Supplement",
+            "Best protein. Buy only here.")]
+        public void PostAddShouldBeForAdminsAndReturnViewWhenValidModelIsInvalid(
+            string name,
+            decimal price,
+            string imageUrl,
+            string type,
+            string description)
+            => MyController<ProductsController>
+                .Instance(controller => controller
+                    .WithUser())
+                .Calling(c => c.Add(new ProductFormModel
+                {
+                    Name = name,
+                    Price = price,
+                    ImageUrl = imageUrl,
+                    Type = type,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ProductFormModel>());
+
         [Fact]
         public void DetailsShouldReturnView()
             => MyController<ProductsController>
@@ -88,6 +121,15 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ProductDetailsViewModel>());
+
+        [Fact]
+        public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
+            => MyController<ProductsController>
+                .Instance(controller => controller
+                    .WithData(Product()))
+                .Calling(c => c.Details(1, "Creatine"))
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void GetEditShouldBeForAdminsAndReturnView()
@@ -104,7 +146,7 @@
 
         [Theory]
         [InlineData(1,
-            "ProteinSecond",
+            "Protein",
             100.00,
             "https://www.silabg.com/uf/product/2945_pm_new.jpg",
             "Supplement",
@@ -139,6 +181,77 @@
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<ProductsController>(c => c.Details(id, name)));
+
+        [Theory]
+        [InlineData(1,
+            "Pr",
+            100.00,
+            "https://www.silabg.com/uf/product/2945_pm_new.jpg",
+            "Supplement",
+            "Best protein. Buy only here.")]
+        public void PostEditShouldBeForAdminsAndReturnViewWhenModelIsInvalid(
+            int id,
+            string name,
+            decimal price,
+            string imageUrl,
+            string type,
+            string description)
+            => MyController<ProductsController>
+                .Instance(controller => controller
+                    .WithData(Product())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new ProductFormModel
+                {
+                    Name = name,
+                    Price = price,
+                    ImageUrl = imageUrl,
+                    Type = type,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ProductFormModel>());
+
+        [Theory]
+        [InlineData(2,
+            "Protein",
+            100.00,
+            "https://www.silabg.com/uf/product/2945_pm_new.jpg",
+            "Supplement",
+            "Best protein. Buy only here.")]
+        public void PostEditShouldBeForAdminsAndReturnBadRequestWhenIdIsInvalid(
+            int id,
+            string name,
+            decimal price,
+            string imageUrl,
+            string type,
+            string description)
+            => MyController<ProductsController>
+                .Instance(controller => controller
+                    .WithData(Product())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new ProductFormModel
+                {
+                    Name = name,
+                    Price = price,
+                    ImageUrl = imageUrl,
+                    Type = type,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .ValidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void DeleteShouldBeForAdminsAndReturnRedirect()

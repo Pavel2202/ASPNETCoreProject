@@ -59,7 +59,7 @@
         {
             if(!ModelState.IsValid)
             {
-                return BadRequest();
+                return this.View(model);
             }
 
             var created = service.Create(model, this.User.Id());
@@ -138,7 +138,7 @@
         }
 
         [Authorize]
-        public IActionResult MyProfile(string userId)
+        public IActionResult MyProfile()
         {
             var trainerId = service.MyProfile(this.User.Id());
 

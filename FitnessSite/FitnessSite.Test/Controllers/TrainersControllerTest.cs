@@ -87,6 +87,82 @@
                 .Redirect(redirect => redirect
                     .To<TrainersController>(c => c.All(With.Any<AllTrainersQueryModel>())));
 
+        [Theory]
+        [InlineData("Pa",
+            "paveltimenov@abv.bg",
+            "514752368",
+            "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
+            "Hello. I am Pavel Timenov. Taekwondo black belt.",
+            1)]
+        public void PostBecomeShouldBeAuthorizedAndReturnViewWhenModelIsInvalid(
+            string fullName,
+            string email,
+            string phoneNumber,
+            string imageUrl,
+            string description,
+            int sportId)
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithUser())
+                .Calling(c => c.Become(new BecomeTrainerFormModel
+                {
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    ImageUrl = imageUrl,
+                    Description = description,
+                    SportId = sportId
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<BecomeTrainerFormModel>());
+
+        [Theory]
+        [InlineData("Pavel Timenov",
+            "paveltimenov@abv.bg",
+            "514752368",
+            "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
+            "Hello. I am Pavel Timenov. Taekwondo black belt.",
+            1)]
+        public void PostBecomeShouldBeAuthorizedAndReturnBadRequestWhenUserIsTrainerAlready(
+            string fullName,
+            string email,
+            string phoneNumber,
+            string imageUrl,
+            string description,
+            int sportId)
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(TenPublicSports)
+                    .WithData(Trainer())
+                    .WithData(User())
+                    .WithUser())
+                .Calling(c => c.Become(new BecomeTrainerFormModel
+                {
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    ImageUrl = imageUrl,
+                    Description = description,
+                    SportId = sportId
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .ValidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
+
 
         [Fact]
         public void DetailsShouldReturnView()
@@ -97,6 +173,15 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<TrainerDetailsViewModel>());
+
+        [Fact]
+        public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(Trainer()))
+                .Calling(c => c.Details(1, $"Pavel-{Sport()}"))
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void GetEditShouldBeAuthorizedAndReturnView()
@@ -113,6 +198,22 @@
                 .AndAlso()
                 .ShouldReturn()
                 .View();
+
+        [Fact]
+        public void GetEditShouldBeAuthorizedAndReturnBadRequestWhenUserIsNotTrainerOrAdmin()
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(SecondTrainer())
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithUser())
+                .Calling(c => c.Edit(2))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
 
         [Theory]
         [InlineData(1,
@@ -157,6 +258,87 @@
                 .Redirect(redirect => redirect
                     .To<TrainersController>(c => c.All(With.Any<AllTrainersQueryModel>())));
 
+        [Theory]
+        [InlineData(1,
+            "Pa",
+            "paveltimenov@abv.bg",
+            "514752368",
+            "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
+            "Hello. I am Pavel Timenov. Taekwondo black belt.",
+            1)]
+        public void PostEditShouldBeAuthorizedAndReturnViewWhenModelIsInvalid(
+            int id,
+            string fullName,
+            string email,
+            string phoneNumber,
+            string imageUrl,
+            string description,
+            int sportId)
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(Trainer())
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new BecomeTrainerFormModel
+                {
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    ImageUrl = imageUrl,
+                    Description = description,
+                    SportId = sportId
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<BecomeTrainerFormModel>());
+
+        [Theory]
+        [InlineData(2,
+            "Pavel Timenov",
+            "paveltimenov@abv.bg",
+            "514752368",
+            "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
+            "Hello. I am Pavel Timenov. Taekwondo black belt.",
+            1)]
+        public void PostEditShouldBeAuthorizedAndReturnBadRequestWhenIdIsInvalid(
+            int id,
+            string fullName,
+            string email,
+            string phoneNumber,
+            string imageUrl,
+            string description,
+            int sportId)
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(Trainer())
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new BecomeTrainerFormModel
+                {
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    ImageUrl = imageUrl,
+                    Description = description,
+                    SportId = sportId
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .ValidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
+
         [Fact]
         public void DeleteShouldBeAuthorizedAndReturnRedirect()
             => MyController<TrainersController>
@@ -177,6 +359,22 @@
                     .To<TrainersController>(c => c.All(With.Any<AllTrainersQueryModel>())));
 
         [Fact]
+        public void DeleteShouldBeAuthorizedAndReturnBadRequestWhenUserIsNotTrainerOrAdmin()
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(SecondTrainer())
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithUser())
+               .Calling(c => c.Delete(2))
+               .ShouldHave()
+               .ActionAttributes(attributes => attributes
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
+
+        [Fact]
         public void MyProfileShouldReturnView()
             => MyController<TrainersController>
                 .Instance(controller => controller
@@ -184,7 +382,7 @@
                     .WithData(TenPublicSports)
                     .WithData(User())
                     .WithUser())
-                .Calling(c => c.MyProfile("TestId"))
+                .Calling(c => c.MyProfile())
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
                     .RestrictingForAuthorizedRequests())
@@ -210,6 +408,23 @@
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<TrainersController>(c => c.All(With.Any<AllTrainersQueryModel>())));
+
+        [Fact]
+        public void HireShouldReturnBadRequestWhenUserIsCustomer()
+            => MyController<TrainersController>
+                .Instance(controller => controller
+                    .WithData(Trainer())
+                    .WithData(TenPublicSports)
+                    .WithData(User())
+                    .WithData(SecondUser())
+                    .WithUser())
+                .Calling(c => c.Hire(1))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
 
 
         private static AllTrainersQueryModel GetQuery()

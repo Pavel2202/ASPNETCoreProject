@@ -70,6 +70,32 @@
                 .Redirect(redirect => redirect
                     .To<RecipesController>(c => c.All(With.Any<AllRecipesQueryModel>())));
 
+        [Theory]
+        [InlineData("eg",
+            "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
+            "Crack the eggs. Put then in the pan and mix.")]
+        public void PostAddShouldBeAuthorizedAndReturnViewWhenModelIsInvalid(string title,
+            string imageUrl,
+            string description)
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithUser())
+                .Calling(c => c.Add(new RecipeFormModel
+                {
+                    Title = title,
+                    ImageUrl = imageUrl,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<RecipeFormModel>());
+
         [Fact]
         public void DetailsShouldReturnView()
             => MyController<RecipesController>
@@ -80,6 +106,16 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<RecipeDetailsViewModel>());
+
+        [Fact]
+        public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithData(Recipe())
+                    .WithUser())
+                .Calling(c => c.Details(1, "Rice"))
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void GetEditShouldBeAuthorizedAndReturnView()
@@ -94,6 +130,20 @@
                 .AndAlso()
                 .ShouldReturn()
                 .View();
+
+        [Fact]
+        public void GetEditShouldBeAuthorizedAndReturnUnauthorizedWhenUserIsNotCreatorOrAdmin()
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithData(SecondRecipe())
+                    .WithUser())
+                .Calling(c => c.Edit(2))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldReturn()
+                .Unauthorized();
 
         [Theory]
         [InlineData(1,
@@ -126,8 +176,59 @@
                 .Redirect(redirect => redirect
                     .To<RecipesController>(c => c.Details(id, title)));
 
+        [Theory]
+        [InlineData(1,
+            "eg",
+            "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
+            "Crack the eggs. Put then in the pan and mix.")]
+        public void PostEditShouldBeAuthorizedAndReturnViewWhenModelIsInvalid(int id,
+            string title,
+            string imageUrl,
+            string description)
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithData(Recipe())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new RecipeFormModel
+                {
+                    Title = title,
+                    ImageUrl = imageUrl,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests())
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<RecipeFormModel>());
+
+        [Theory]
+        [InlineData(2,
+            "Scrambled eggs",
+            "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
+            "Crack the eggs. Put then in the pan and mix.")]
+        public void PostEditShouldBeAuthorizedAndReturnBadRequestWhenIdIsInvalid(int id,
+            string title,
+            string imageUrl,
+            string description)
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithData(Recipe())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new RecipeFormModel
+                {
+                    Title = title,
+                    ImageUrl = imageUrl,
+                    Description = description
+                }))
+                .ShouldReturn()
+                .BadRequest();
+
         [Fact]
-        public void DeleteShouldBeForAdminsAndReturnRedirect()
+        public void DeleteShouldBeAuthorizedAndReturnRedirect()
             => MyController<RecipesController>
                 .Instance(controller => controller
                     .WithData(Recipe())
@@ -142,6 +243,20 @@
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<RecipesController>(c => c.All(With.Any<AllRecipesQueryModel>())));
+
+        [Fact]
+        public void DeleteShouldBeAuthorizedAndReturnUnauthorizedWhenUserIsNotCreatorOrAdmin()
+            => MyController<RecipesController>
+                .Instance(controller => controller
+                    .WithData(SecondRecipe())
+                    .WithUser())
+                .Calling(c => c.Delete(2))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldReturn()
+                .Unauthorized();
 
         [Fact]
         public void MineShouldReturnView()
@@ -181,6 +296,25 @@
                 {
                     Id = "TestId",
                     UserName = "TestUser"
+                },
+                IsPublic = true
+            };
+
+            return recipe;
+        }
+
+        private static Recipe SecondRecipe()
+        {
+            var recipe = new Recipe()
+            {
+                Id = 2,
+                Title = "Rice",
+                ImageUrl = "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
+                Description = "Crack the eggs. Put then in the pan and mix.",
+                Creator = new User()
+                {
+                    Id = "InvalidId",
+                    UserName = "InvalidUserName"
                 },
                 IsPublic = true
             };

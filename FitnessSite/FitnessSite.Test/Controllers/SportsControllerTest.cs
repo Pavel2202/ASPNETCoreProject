@@ -71,6 +71,52 @@
                 .Redirect(redirect => redirect
                     .To<SportsController>(c => c.All(With.Any<AllSportsQueryModel>())));
 
+        [Theory]
+        [InlineData("fo",
+            "England",
+            "The most played sport in the world. It is also the most expensive sport.")]
+        public void PostAddShouldBeForAdminsAndReturnViewWhenModelIsInvalid(
+            string name,
+            string origin,
+            string description)
+            => MyController<SportsController>
+                .Instance(controller => controller
+                    .WithUser())
+                .Calling(c => c.Add(new SportsFormModel
+                {
+                    Name = name,
+                    Origin = origin,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<SportsFormModel>());
+
+        [Fact]
+        public void DetailsShouldReturnView()
+            => MyController<SportsController>
+                .Instance(controller => controller
+                    .WithData(Sport()))
+                .Calling(c => c.Details(1, "Football-England"))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<SportsDetailsViewModel>());
+
+        [Fact]
+        public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
+            => MyController<SportsController>
+                .Instance(controller => controller
+                    .WithData(Sport()))
+                .Calling(c => c.Details(1, "Football-France"))
+                .ShouldReturn()
+                .BadRequest();
+
         [Fact]
         public void GetEditShouldBeForAdminsAndReturnView()
             => MyController<SportsController>
@@ -116,6 +162,65 @@
                 .Redirect(redirect => redirect
                     .To<SportsController>(c => c.Details(id, "Football-England")));
 
+        [Theory]
+        [InlineData(1,
+            "fo",
+            "England",
+            "The most played sport in the world. It is also the most expensive sport.")]
+        public void PostEditShouldBeForAdminsAndReturnViewWhenModelIsInvalid(
+            int id,
+            string name,
+            string origin,
+            string description)
+            => MyController<SportsController>
+                .Instance(controller => controller
+                    .WithData(Sport())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new SportsFormModel
+                {
+                    Name = name,
+                    Origin = origin,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<SportsFormModel>());
+
+        [Theory]
+        [InlineData(2,
+            "Football",
+            "England",
+            "The most played sport in the world. It is also the most expensive sport.")]
+        public void PostEditShouldBeForAdminsAndReturnBadRequestWhenIdIsInvalid(
+            int id,
+            string name,
+            string origin,
+            string description)
+            => MyController<SportsController>
+                .Instance(controller => controller
+                    .WithData(Sport())
+                    .WithUser())
+                .Calling(c => c.Edit(id, new SportsFormModel
+                {
+                    Name = name,
+                    Origin = origin,
+                    Description = description
+                }))
+                .ShouldHave()
+                .ActionAttributes(attributes => attributes
+                    .RestrictingForHttpMethod(HttpMethod.Post)
+                    .RestrictingForAuthorizedRequests(AdministratorRoleName))
+                .ValidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
+
         [Fact]
         public void DeleteShouldBeForAdminsAndReturnRedirect()
             => MyController<SportsController>
@@ -132,16 +237,6 @@
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<SportsController>(c => c.All(With.Any<AllSportsQueryModel>())));
-
-        [Fact]
-        public void DetailsShouldReturnView()
-            => MyController<SportsController>
-                .Instance(controller => controller
-                    .WithData(Sport()))
-                .Calling(c => c.Details(1, "Football-England"))
-                .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<SportsDetailsViewModel>());
 
         private static AllSportsQueryModel GetQuery()
         {
