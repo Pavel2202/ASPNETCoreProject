@@ -122,6 +122,7 @@
             return this.RedirectToAction("All", "Trainers");
         }
 
+        [Authorize]
         public IActionResult Delete(int id)
         {
             if (!service.IsTrainer(id, this.User.Id()) && !this.User.IsAdmin())

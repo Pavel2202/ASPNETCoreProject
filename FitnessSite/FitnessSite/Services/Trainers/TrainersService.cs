@@ -108,7 +108,7 @@
             var trainer = context.Trainers.FirstOrDefault(t => t.Id == id);
 
             var user = context.Users
-                .FirstOrDefault(u => u.TrainerId == trainer.Id);
+                .FirstOrDefault(u => u.Id == trainer.UserId);
 
             context.Trainers.Remove(trainer);
 
