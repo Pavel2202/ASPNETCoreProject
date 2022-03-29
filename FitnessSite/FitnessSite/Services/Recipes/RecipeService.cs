@@ -5,7 +5,6 @@
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using FitnessSite.Models.Recipes;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -20,7 +19,7 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<RecipeListingViewModel> AllRecipes(
+        public IEnumerable<RecipeListingViewModel> All(
             string searchTerm = null,
             RecipeSorting sorting = RecipeSorting.DateCreated,
             int currentPage = 1,
@@ -40,7 +39,7 @@
 
             recipesQuery = sorting switch
             {
-                RecipeSorting.Title => recipesQuery.OrderByDescending(r => r.Title),
+                RecipeSorting.Title => recipesQuery.OrderBy(r => r.Title),
                 RecipeSorting.DateCreated or _ => recipesQuery.OrderByDescending(r => r.Id)
             };
 

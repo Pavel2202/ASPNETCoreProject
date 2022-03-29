@@ -1,17 +1,15 @@
 ﻿namespace FitnessSite.Test.Controllers
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
-    using System;
-    using FitnessSite.Models.Products;
     using FitnessSite.Models.Home;
+    using FitnessSite.Models.Products;
     using FitnessSite.Models.Recipes;
-
+    using MyTested.AspNetCore.Mvc;
+    using System;
+    using Xunit;
     using static Data.Products;
     using static Data.Recipes;
     using static Data.Trainers;
-
     using static WebConstants.Cache;
 
     public class HomeControllerTest

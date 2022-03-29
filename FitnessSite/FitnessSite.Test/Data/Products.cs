@@ -1,11 +1,10 @@
 ﻿namespace FitnessSite.Test.Data
 {
     using FitnessSite.Data.Models;
-    using System;
+    using FitnessSite.Data.Models.Enums;
+    using FitnessSite.Models.Products;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public static class Products
     {
@@ -14,5 +13,35 @@
             {
                 IsPublic = true
             });
+
+        public static AllProductsQueryModel GetQuery
+            => new AllProductsQueryModel
+            {
+                SearchTerm = null,
+                Type = null,
+                Sorting = ProductSorting.DateCreated,
+                CurrentPage = 1
+            };
+
+        public static Product Product
+            => new Product()
+            {
+                Id = 1,
+                Name = "Protein",
+                Price = 100,
+                ImageUrl = "https://www.silabg.com/uf/product/2945_pm_new.jpg",
+                Type = ProductType.Supplement,
+                Description = "Best protein. Buy only here.",
+                IsPublic = true
+            };
+
+        public static Cart Cart
+            => new Cart()
+            {
+                User = new User
+                {
+                    Id = "TestId"
+                }
+            };
     }
 }

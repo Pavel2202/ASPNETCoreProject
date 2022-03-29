@@ -22,7 +22,7 @@
 
         public IActionResult All([FromQuery] AllTrainersQueryModel query)
         {
-            var trainers = service.AllTrainers(
+            var trainers = service.All(
                 query.SearchTerm,
                 query.Sport,
                 query.Sorting,
@@ -69,7 +69,7 @@
                 return BadRequest();
             }
 
-            TempData[GlobalMessageKey] = "Thank you for becoming a trainer!";
+            TempData[GlobalMessageKey] = "Thank you for becoming a trainer! Waiting for admin approval...";
 
             return this.RedirectToAction("All", "Trainers");
         }

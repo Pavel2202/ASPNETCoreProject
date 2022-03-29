@@ -1,15 +1,13 @@
 ﻿namespace FitnessSite.Test.Controllers
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
+    using FitnessSite.Data.Models.Enums;
     using FitnessSite.Models.Products;
-    using FitnessSite.Data.Models;
+    using MyTested.AspNetCore.Mvc;
     using System.Linq;
-
-    using static Data.Products;
-
+    using Xunit;
     using static Areas.Admin.AdminConstants;
+    using static Data.Products;
     using static WebConstants;
 
     public class ProductsControllerTest
@@ -19,7 +17,7 @@
             => MyController<ProductsController>
                 .Instance(controller => controller
                     .WithData(TenPublicProducts))
-                .Calling(c => c.All(GetQuery()))
+                .Calling(c => c.All(GetQuery))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AllProductsQueryModel>());
@@ -65,7 +63,7 @@
                     .RestrictingForAuthorizedRequests(AdministratorRoleName))
                 .ValidModelState()
                 .Data(data => data
-                    .WithSet<Product>(products => products
+                    .WithSet<FitnessSite.Data.Models.Product>(products => products
                         .Any(p =>
                             p.Name == name &&
                             p.Price == price &&
@@ -116,7 +114,7 @@
         public void DetailsShouldReturnView()
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product()))
+                    .WithData(Product))
                 .Calling(c => c.Details(1, "Protein"))
                 .ShouldReturn()
                 .View(view => view
@@ -126,7 +124,7 @@
         public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product()))
+                    .WithData(Product))
                 .Calling(c => c.Details(1, "Creatine"))
                 .ShouldReturn()
                 .BadRequest();
@@ -135,7 +133,7 @@
         public void GetEditShouldBeForAdminsAndReturnView()
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product()))
+                    .WithData(Product))
                 .Calling(c => c.Edit(1))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -160,7 +158,7 @@
             string description)
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product())
+                    .WithData(Product)
                     .WithUser())
                 .Calling(c => c.Edit(id, new ProductFormModel
                 {
@@ -198,7 +196,7 @@
             string description)
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product())
+                    .WithData(Product)
                     .WithUser())
                 .Calling(c => c.Edit(id, new ProductFormModel
                 {
@@ -234,7 +232,7 @@
             string description)
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product())
+                    .WithData(Product)
                     .WithUser())
                 .Calling(c => c.Edit(id, new ProductFormModel
                 {
@@ -257,7 +255,7 @@
         public void DeleteShouldBeForAdminsAndReturnRedirect()
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product())
+                    .WithData(Product)
                     .WithUser())
                .Calling(c => c.Delete(1))
                .ShouldHave()
@@ -274,7 +272,8 @@
         public void AddToCartShouldBeAuthorizedAndReturnRedirect()
             => MyController<ProductsController>
                 .Instance(controller => controller
-                    .WithData(Product(), Cart())
+                    .WithData(Product)
+                    .WithData(Cart)
                     .WithUser())
                 .Calling(c => c.AddToCart(1))
                 .ShouldHave()
@@ -287,46 +286,6 @@
                 .Redirect(redirect => redirect
                     .To<ProductsController>(c => c.All(With.Any<AllProductsQueryModel>())));
 
-        private static AllProductsQueryModel GetQuery()
-        {
-            AllProductsQueryModel model = new AllProductsQueryModel
-            {
-                SearchTerm = null,
-                Type = null,
-                Sorting = ProductSorting.DateCreated,
-                CurrentPage = 1
-            };
-
-            return model;
-        }
-
-        private static Product Product()
-        {
-            var product = new Product()
-            {
-                Id = 1,
-                Name = "Protein",
-                Price = 100,
-                ImageUrl = "https://www.silabg.com/uf/product/2945_pm_new.jpg",
-                Type = ProductType.Supplement,
-                Description = "Best protein. Buy only here.",
-                IsPublic = true
-            };
-
-            return product;
-        }
-
-        private static Cart Cart()
-        {
-            Cart cart = new Cart()
-            {
-                User = new User
-                {
-                    Id = "TestId"
-                }
-            };
-
-            return cart;
-        }
+        
     }
 }

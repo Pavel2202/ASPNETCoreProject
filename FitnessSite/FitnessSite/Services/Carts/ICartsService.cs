@@ -5,7 +5,7 @@
 
     public interface ICartsService
     {
-        IEnumerable<ProductsViewModel> Products(string userId);
+        IEnumerable<ProductViewModel> Products(string userId);
 
         void Remove(int productId);
 

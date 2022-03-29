@@ -25,7 +25,7 @@
                 .ProjectTo<TrainerSportsViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
-        public IEnumerable<TrainerListingViewModel> AllTrainers(
+        public IEnumerable<TrainerListingViewModel> All(
             string searchTerm = null,
             string sport = null,
             TrainerSorting sorting = TrainerSorting.DateCreated,
@@ -52,9 +52,9 @@
 
             trainersQuery = sorting switch
             {
-                TrainerSorting.FullName => trainersQuery.OrderByDescending(t => t.FullName),
+                TrainerSorting.FullName => trainersQuery.OrderBy(t => t.FullName),
                 TrainerSorting.Customers => trainersQuery.OrderByDescending(t => t.Customers.Count),
-                TrainerSorting.Sport => trainersQuery.OrderByDescending(t => t.Sport.Name),
+                TrainerSorting.Sport => trainersQuery.OrderBy(t => t.Sport.Name),
                 TrainerSorting.DateCreated or _ => trainersQuery.OrderByDescending(t => t.Id)
             };
 
@@ -163,17 +163,17 @@
         {
             var trainer = context.Trainers.FirstOrDefault(t => t.Id == trainerId);
 
-            if (trainer.Customers.Any(t => t.Id == userId))
-            {
-                return false;
-            }
-
             if (trainer.UserId == userId)
             {
                 return false;
             }
 
             var user = context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (trainer.Customers.Any(u => u.Id == userId))
+            {
+                return false;
+            }
 
             trainer.Customers.Add(user);
 

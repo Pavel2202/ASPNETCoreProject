@@ -4,7 +4,7 @@
 
     using static FitnessSite.Data.DataConstants;
 
-    public class SportsFormModel : ISportsModel
+    public class SportFormModel : ISportModel
     {
         [Required]
         [StringLength(SportNameMaxLength, MinimumLength = SportNameMinLength)]

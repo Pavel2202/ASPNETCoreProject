@@ -1,11 +1,9 @@
 ﻿namespace FitnessSite.Test.Data
 {
     using FitnessSite.Data.Models;
-    using System;
+    using FitnessSite.Models.Sports;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public static class Sports
     {
@@ -14,5 +12,23 @@
             {
                 IsPublic = true
             });
+
+        public static AllSportsQueryModel GetQuery
+            =>new AllSportsQueryModel
+            {
+                SearchTerm = null,
+                Sorting = SportSorting.DateCreated,
+                CurrentPage = 1
+            };
+
+        public static Sport Sport
+            =>new Sport()
+            {
+                Id = 1,
+                Name = "Football",
+                Origin = "England",
+                Description = "The most played sport in the world. It is also the most expensive sport.",
+                IsPublic = true
+            };
     }
 }

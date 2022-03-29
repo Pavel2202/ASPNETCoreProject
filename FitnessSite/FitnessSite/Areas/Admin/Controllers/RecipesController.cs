@@ -30,7 +30,7 @@
                 TotalRecipes = totalRecipes
             };
 
-            recipes.Recipes = service.AllRecipes(null,
+            recipes.Recipes = service.All(null,
                 RecipeSorting.DateCreated,
                 recipes.CurrentPage,
                 isPublic: false);

@@ -30,7 +30,7 @@
                 TotalTrainers = totalTrainers
             };
 
-            trainers.Trainers = service.AllTrainers(null,
+            trainers.Trainers = service.All(null,
                 null,
                 TrainerSorting.DateCreated,
                 trainers.CurrentPage,

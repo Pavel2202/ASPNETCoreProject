@@ -4,6 +4,7 @@
     using AutoMapper.QueryableExtensions;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
+    using FitnessSite.Data.Models.Enums;
     using FitnessSite.Models.Products;
     using System;
     using System.Collections.Generic;
@@ -40,7 +41,7 @@
             context.SaveChanges();
         }
 
-        public IEnumerable<ProductListingViewModel> AllProducts(
+        public IEnumerable<ProductListingViewModel> All(
             string searchTerm = null,
             string type = null,
             ProductSorting sorting = ProductSorting.DateCreated,
@@ -67,8 +68,8 @@
 
             productsQuery = sorting switch
             {
-                ProductSorting.Title => productsQuery.OrderByDescending(p => p.Name),
-                ProductSorting.Type => productsQuery.OrderByDescending(p => p.Type),
+                ProductSorting.Title => productsQuery.OrderBy(p => p.Name),
+                ProductSorting.Type => productsQuery.OrderBy(p => p.Type),
                 ProductSorting.Price => productsQuery.OrderByDescending(p => p.Price),
                 ProductSorting.DateCreated or _ => productsQuery.OrderByDescending(p => p.Id)
             };

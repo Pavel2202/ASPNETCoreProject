@@ -1,15 +1,12 @@
 ﻿namespace FitnessSite.Test.Controllers
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
     using FitnessSite.Models.Recipes;
-    using FitnessSite.Data.Models;
-    using System.Linq;
+    using MyTested.AspNetCore.Mvc;
     using System.Collections.Generic;
-
+    using System.Linq;
+    using Xunit;
     using static Data.Recipes;
-
     using static WebConstants;
 
     public class RecipesControllerTest
@@ -19,7 +16,7 @@
             => MyController<RecipesController>
                 .Instance(controller => controller
                     .WithData(TenPublicRecipes))
-                .Calling(c => c.All(GetQuery()))
+                .Calling(c => c.All(GetQuery))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AllRecipesQueryModel>());
@@ -58,7 +55,7 @@
                     .RestrictingForAuthorizedRequests())
                 .ValidModelState()
                 .Data(data => data
-                    .WithSet<Recipe>(recipes => recipes
+                    .WithSet<FitnessSite.Data.Models.Recipe>(recipes => recipes
                         .Any(r => 
                             r.Title == title &&
                             r.ImageUrl == imageUrl &&
@@ -100,7 +97,7 @@
         public void DetailsShouldReturnView()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Details(1, "Scrambled eggs"))
                 .ShouldReturn()
@@ -111,7 +108,7 @@
         public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Details(1, "Rice"))
                 .ShouldReturn()
@@ -121,7 +118,7 @@
         public void GetEditShouldBeAuthorizedAndReturnView()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Edit(1))
                 .ShouldHave()
@@ -135,7 +132,7 @@
         public void GetEditShouldBeAuthorizedAndReturnUnauthorizedWhenUserIsNotCreatorOrAdmin()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(SecondRecipe())
+                    .WithData(SecondRecipe)
                     .WithUser())
                 .Calling(c => c.Edit(2))
                 .ShouldHave()
@@ -156,7 +153,7 @@
             string description)
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Edit(id, new RecipeFormModel
                 {
@@ -187,7 +184,7 @@
             string description)
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Edit(id, new RecipeFormModel
                 {
@@ -216,7 +213,7 @@
             string description)
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                 .Calling(c => c.Edit(id, new RecipeFormModel
                 {
@@ -231,7 +228,7 @@
         public void DeleteShouldBeAuthorizedAndReturnRedirect()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(Recipe())
+                    .WithData(Recipe)
                     .WithUser())
                .Calling(c => c.Delete(1))
                .ShouldHave()
@@ -248,7 +245,7 @@
         public void DeleteShouldBeAuthorizedAndReturnUnauthorizedWhenUserIsNotCreatorOrAdmin()
             => MyController<RecipesController>
                 .Instance(controller => controller
-                    .WithData(SecondRecipe())
+                    .WithData(SecondRecipe)
                     .WithUser())
                 .Calling(c => c.Delete(2))
                 .ShouldHave()
@@ -272,54 +269,5 @@
                 .View(view => view
                     .WithModelOfType<List<RecipeListingViewModel>>());
 
-        private static AllRecipesQueryModel GetQuery()
-        {
-            AllRecipesQueryModel model = new AllRecipesQueryModel
-            {
-                SearchTerm = null,
-                Sorting = RecipeSorting.DateCreated,
-                CurrentPage = 1
-            };
-
-            return model;
-        }
-
-        private static Recipe Recipe()
-        {
-            var recipe = new Recipe()
-            {
-                Id = 1,
-                Title = "Scrambled eggs",
-                ImageUrl = "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
-                Description = "Crack the eggs. Put then in the pan and mix.",
-                Creator = new User()
-                {
-                    Id = "TestId",
-                    UserName = "TestUser"
-                },
-                IsPublic = true
-            };
-
-            return recipe;
-        }
-
-        private static Recipe SecondRecipe()
-        {
-            var recipe = new Recipe()
-            {
-                Id = 2,
-                Title = "Rice",
-                ImageUrl = "https://bakeitwithlove.com/wp-content/uploads/2021/12/scrambled-eggs-sq.jpg",
-                Description = "Crack the eggs. Put then in the pan and mix.",
-                Creator = new User()
-                {
-                    Id = "InvalidId",
-                    UserName = "InvalidUserName"
-                },
-                IsPublic = true
-            };
-
-            return recipe;
-        }
     }
 }

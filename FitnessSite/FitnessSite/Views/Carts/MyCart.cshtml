@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductsViewModel>
+﻿@model IEnumerable<ProductViewModel>
 
 @{
     ViewData["Title"] = "My Cart";
@@ -13,7 +13,7 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
                 <h6>Price: @product.Price</h6>
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" asp-route-information="@product.ProductInformation()" class="btn btn-primary">Details</a>
                     <a asp-controller="Carts" asp-action="Remove" asp-route-id="@product.Id" class="btn btn-danger">Remove</a>
             </div>
         </div>

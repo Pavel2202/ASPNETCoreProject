@@ -12,7 +12,7 @@
     {
         public MappingProfile()
         {
-            this.CreateMap<Product, ProductsViewModel>();
+            this.CreateMap<Product, ProductViewModel>();
             this.CreateMap<Product, ProductListingViewModel>();
             this.CreateMap<ProductDetailsViewModel, ProductFormModel>();
             this.CreateMap<Product, ProductDetailsViewModel>();
@@ -23,10 +23,10 @@
             this.CreateMap<RecipeFormModel, Recipe>();
             this.CreateMap<RecipeDetailsViewModel, RecipeFormModel>();
 
-            this.CreateMap<Sport, SportsListingViewModel>();
-            this.CreateMap<Sport, SportsDetailsViewModel>();
-            this.CreateMap<SportsFormModel, Sport>();
-            this.CreateMap<SportsDetailsViewModel, SportsFormModel>();
+            this.CreateMap<Sport, SportListingViewModel>();
+            this.CreateMap<Sport, SportDetailsViewModel>();
+            this.CreateMap<SportFormModel, Sport>();
+            this.CreateMap<SportDetailsViewModel, SportFormModel>();
 
             this.CreateMap<Sport, TrainerSportsViewModel>();
             this.CreateMap<Trainer, TrainerDetailsViewModel>()

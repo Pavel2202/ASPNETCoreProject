@@ -1,6 +1,5 @@
 ﻿namespace FitnessSite.Models.Trainers
 {
-    using System.Linq;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 

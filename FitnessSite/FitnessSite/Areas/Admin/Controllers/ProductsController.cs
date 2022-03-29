@@ -2,7 +2,6 @@
 {
     using FitnessSite.Models.Products;
     using FitnessSite.Services.Products;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class ProductsController : AdminController
@@ -31,7 +30,7 @@
                 TotalProducts = totalProducts
             };
 
-            products.Products = service.AllProducts(
+            products.Products = service.All(
                 null,
                 null,
                 ProductSorting.DateCreated,

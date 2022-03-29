@@ -1,8 +1,8 @@
 ﻿namespace FitnessSite.Test.Admin.Routing
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Areas.Admin.Controllers;
+    using MyTested.AspNetCore.Mvc;
+    using Xunit;
 
     public class SportsControllerTest
     {

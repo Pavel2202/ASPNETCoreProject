@@ -1,9 +1,9 @@
 ﻿namespace FitnessSite.Test.Routing
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
     using FitnessSite.Models.Products;
+    using MyTested.AspNetCore.Mvc;
+    using Xunit;
 
     public class ProductsControllerTest
     {

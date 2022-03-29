@@ -5,7 +5,7 @@
 
     public interface IRecipeService
     {
-        IEnumerable<RecipeListingViewModel> AllRecipes(
+        IEnumerable<RecipeListingViewModel> All(
             string searchTerm = null,
             RecipeSorting sorting = RecipeSorting.DateCreated,
             int currentPage = 1,

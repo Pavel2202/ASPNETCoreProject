@@ -7,7 +7,7 @@
     {
         void CreateProduct(ProductFormModel model);
 
-        IEnumerable<ProductListingViewModel> AllProducts(string searchTerm = null,
+        IEnumerable<ProductListingViewModel> All(string searchTerm = null,
             string type = null,
             ProductSorting sorting = ProductSorting.DateCreated,
             int currentPage = 1,

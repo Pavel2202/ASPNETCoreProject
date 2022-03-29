@@ -5,7 +5,7 @@
 
     public class AllProductsQueryModel
     {
-        public const int ProductsPerPage = 3;
+        public const int ProductsPerPage = 6;
 
         [Display(Name = "Search by text")]
         public string SearchTerm { get; set; }

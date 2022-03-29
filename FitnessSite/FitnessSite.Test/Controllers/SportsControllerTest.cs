@@ -1,15 +1,12 @@
 ﻿namespace FitnessSite.Test.Controllers
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
     using FitnessSite.Models.Sports;
-    using FitnessSite.Data.Models;
+    using MyTested.AspNetCore.Mvc;
     using System.Linq;
-
-    using static Data.Sports;
-
+    using Xunit;
     using static Areas.Admin.AdminConstants;
+    using static Data.Sports;
     using static WebConstants;
 
     public class SportsControllerTest
@@ -19,7 +16,7 @@
             => MyController<SportsController>
                 .Instance(controller => controller
                     .WithData(TenPublicSports))
-                .Calling(c => c.All(GetQuery()))
+                .Calling(c => c.All(GetQuery))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AllSportsQueryModel>());
@@ -47,7 +44,7 @@
             => MyController<SportsController>
                 .Instance(controller => controller
                     .WithUser())
-                .Calling(c => c.Add(new SportsFormModel
+                .Calling(c => c.Add(new SportFormModel
                 {
                     Name = name,
                     Origin = origin,
@@ -59,7 +56,7 @@
                     .RestrictingForAuthorizedRequests(AdministratorRoleName))
                 .ValidModelState()
                 .Data(data => data
-                    .WithSet<Sport>(sports => sports
+                    .WithSet<FitnessSite.Data.Models.Sport>(sports => sports
                         .Any(s =>
                             s.Name == name &&
                             s.Origin == origin &&
@@ -82,7 +79,7 @@
             => MyController<SportsController>
                 .Instance(controller => controller
                     .WithUser())
-                .Calling(c => c.Add(new SportsFormModel
+                .Calling(c => c.Add(new SportFormModel
                 {
                     Name = name,
                     Origin = origin,
@@ -96,23 +93,23 @@
                 .AndAlso()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<SportsFormModel>());
+                    .WithModelOfType<SportFormModel>());
 
         [Fact]
         public void DetailsShouldReturnView()
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport()))
+                    .WithData(Sport))
                 .Calling(c => c.Details(1, "Football-England"))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<SportsDetailsViewModel>());
+                    .WithModelOfType<SportDetailsViewModel>());
 
         [Fact]
         public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport()))
+                    .WithData(Sport))
                 .Calling(c => c.Details(1, "Football-France"))
                 .ShouldReturn()
                 .BadRequest();
@@ -121,7 +118,7 @@
         public void GetEditShouldBeForAdminsAndReturnView()
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport()))
+                    .WithData(Sport))
                 .Calling(c => c.Edit(1))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -142,9 +139,9 @@
             string description)
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport())
+                    .WithData(Sport)
                     .WithUser())
-                .Calling(c => c.Edit(id, new SportsFormModel
+                .Calling(c => c.Edit(id, new SportFormModel
                 {
                     Name = name,
                     Origin = origin,
@@ -174,9 +171,9 @@
             string description)
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport())
+                    .WithData(Sport)
                     .WithUser())
-                .Calling(c => c.Edit(id, new SportsFormModel
+                .Calling(c => c.Edit(id, new SportFormModel
                 {
                     Name = name,
                     Origin = origin,
@@ -190,7 +187,7 @@
                 .AndAlso()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<SportsFormModel>());
+                    .WithModelOfType<SportFormModel>());
 
         [Theory]
         [InlineData(2,
@@ -204,9 +201,9 @@
             string description)
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport())
+                    .WithData(Sport)
                     .WithUser())
-                .Calling(c => c.Edit(id, new SportsFormModel
+                .Calling(c => c.Edit(id, new SportFormModel
                 {
                     Name = name,
                     Origin = origin,
@@ -225,7 +222,7 @@
         public void DeleteShouldBeForAdminsAndReturnRedirect()
             => MyController<SportsController>
                 .Instance(controller => controller
-                    .WithData(Sport())
+                    .WithData(Sport)
                     .WithUser())
                .Calling(c => c.Delete(1))
                .ShouldHave()
@@ -236,32 +233,6 @@
                 .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
-                    .To<SportsController>(c => c.All(With.Any<AllSportsQueryModel>())));
-
-        private static AllSportsQueryModel GetQuery()
-        {
-            AllSportsQueryModel model = new AllSportsQueryModel
-            {
-                SearchTerm = null,
-                Sorting = SportSorting.DateCreated,
-                CurrentPage = 1
-            };
-
-            return model;
-        }
-
-        private static Sport Sport()
-        {
-            var sport = new Sport()
-            {
-                Id = 1,
-                Name = "Football",
-                Origin = "England",
-                Description = "The most played sport in the world. It is also the most expensive sport.",
-                IsPublic = true
-            };
-
-            return sport;
-        }
+                    .To<SportsController>(c => c.All(With.Any<AllSportsQueryModel>())));       
     }
 }

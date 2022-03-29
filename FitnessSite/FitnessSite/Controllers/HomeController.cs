@@ -1,7 +1,5 @@
 ﻿namespace FitnessSite.Controllers
 {
-    using AutoMapper;
-    using FitnessSite.Models;
     using FitnessSite.Models.Home;
     using FitnessSite.Models.Products;
     using FitnessSite.Models.Recipes;
@@ -9,12 +7,7 @@
     using FitnessSite.Services.Home;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
-    using Microsoft.Extensions.Logging;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     using static FitnessSite.WebConstants.Cache;
 

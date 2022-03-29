@@ -6,9 +6,8 @@
     using FitnessSite.Services.Products;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using static WebConstants;
     using static Areas.Admin.AdminConstants;
+    using static WebConstants;
 
     public class ProductsController : Controller
     {
@@ -23,7 +22,7 @@
 
         public IActionResult All([FromQuery] AllProductsQueryModel query)
         {
-            var products = service.AllProducts(
+            var products = service.All(
                 query.SearchTerm,
                 query.Type,
                 query.Sorting,

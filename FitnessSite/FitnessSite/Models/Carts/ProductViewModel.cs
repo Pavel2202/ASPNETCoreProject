@@ -1,6 +1,8 @@
 ﻿namespace FitnessSite.Models.Carts
 {
-    public class ProductsViewModel
+    using FitnessSite.Models.Products;
+
+    public class ProductViewModel : IProductModel
     {
         public int Id { get; set; }
 

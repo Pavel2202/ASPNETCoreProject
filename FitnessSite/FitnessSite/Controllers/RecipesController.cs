@@ -22,7 +22,7 @@
 
         public IActionResult All([FromQuery] AllRecipesQueryModel query)
         {
-            var recipes = service.AllRecipes(
+            var recipes = service.All(
                 query.SearchTerm,
                 query.Sorting,
                 query.CurrentPage, 
@@ -53,7 +53,14 @@
 
             service.CreateRecipe(recipe, this.User.Id());
 
-            TempData[GlobalMessageKey] = "You successfully added a recipe!";
+            if (this.User.IsAdmin())
+            {
+                TempData[GlobalMessageKey] = "You successfully added a recipe!";
+            }
+            else
+            {
+                TempData[GlobalMessageKey] = "Your recipe is awaiting for approval!";
+            }           
 
             return this.RedirectToAction("All", "Recipes");
         }
@@ -103,7 +110,14 @@
 
             var recipe = service.GetRecipe(id);
 
-            TempData[GlobalMessageKey] = "You successfully edited a recipe!";
+            if (this.User.IsAdmin())
+            {
+                TempData[GlobalMessageKey] = "You successfully edited a recipe!";
+            }
+            else
+            {
+                TempData[GlobalMessageKey] = "Your recipe is awaiting for approval!";
+            }            
 
             return RedirectToAction("Details", new { id, information = recipe.RecipeInformation() });
         }

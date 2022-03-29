@@ -1,6 +1,6 @@
 ﻿namespace FitnessSite.Models.Sports
 {
-    public interface ISportsModel
+    public interface ISportModel
     {
         public string Name { get; set; }
 

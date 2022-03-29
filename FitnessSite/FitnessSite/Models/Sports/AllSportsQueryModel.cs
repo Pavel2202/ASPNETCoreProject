@@ -16,6 +16,6 @@
 
         public int TotalSports { get; set; }
 
-        public IEnumerable<SportsListingViewModel> Sports { get; set; }
+        public IEnumerable<SportListingViewModel> Sports { get; set; }
     }
 }

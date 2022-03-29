@@ -9,7 +9,7 @@
 
         bool Create(BecomeTrainerFormModel model, string userId);
 
-        IEnumerable<TrainerListingViewModel> AllTrainers(
+        IEnumerable<TrainerListingViewModel> All(
             string searchTerm = null,
             string sport = null,
             TrainerSorting sorting = TrainerSorting.DateCreated,

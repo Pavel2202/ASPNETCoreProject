@@ -13,7 +13,7 @@
         public static string ProductInformation(this IProductModel product)
             => product.Name;
 
-        public static string SportInformation(this ISportsModel sport)
+        public static string SportInformation(this ISportModel sport)
             => sport.Name + "-" + sport.Origin;
 
         public static string TrainerInformation(this ITrainerModel trainer)

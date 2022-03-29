@@ -1,7 +1,7 @@
 ﻿namespace FitnessSite.Data.Models
 {
+    using FitnessSite.Data.Models.Enums;
     using System.ComponentModel.DataAnnotations;
-
     using static DataConstants;
 
     public class Product

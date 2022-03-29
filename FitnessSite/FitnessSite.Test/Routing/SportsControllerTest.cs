@@ -1,9 +1,9 @@
 ﻿namespace FitnessSite.Test.Routing
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
     using FitnessSite.Models.Sports;
+    using MyTested.AspNetCore.Mvc;
+    using Xunit;
 
     public class SportsControllerTest
     {
@@ -28,7 +28,7 @@
                 .ShouldMap(request => request
                     .WithPath("/Sports/Add")
                     .WithMethod(HttpMethod.Post))
-                .To<SportsController>(c => c.Add(With.Any<SportsFormModel>()));
+                .To<SportsController>(c => c.Add(With.Any<SportFormModel>()));
 
         [Fact]
         public void DetailsShouldBeMapped()
@@ -51,7 +51,7 @@
                 .ShouldMap(request => request
                     .WithPath("/Sports/Edit")
                     .WithMethod(HttpMethod.Post))
-                .To<SportsController>(c => c.Edit(With.Any<int>(), With.Any<SportsFormModel>()));
+                .To<SportsController>(c => c.Edit(With.Any<int>(), With.Any<SportFormModel>()));
 
         [Fact]
         public void DeleteShouldBeMapped()

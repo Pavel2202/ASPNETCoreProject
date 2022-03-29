@@ -19,7 +19,7 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<SportsListingViewModel> All(
+        public IEnumerable<SportListingViewModel> All(
             string searchTerm = null,
             SportSorting sorting = SportSorting.DateCreated,
             int currentPage = 1,
@@ -39,15 +39,15 @@
 
             sportsQuery = sorting switch
             {
-                SportSorting.Name => sportsQuery.OrderByDescending(r => r.Name),
-                SportSorting.Origin => sportsQuery.OrderByDescending(r => r.Origin),
+                SportSorting.Name => sportsQuery.OrderBy(r => r.Name),
+                SportSorting.Origin => sportsQuery.OrderBy(r => r.Origin),
                 SportSorting.DateCreated or _ => sportsQuery.OrderByDescending(r => r.Id)
             };
 
             var sports = sportsQuery
                 .Skip((currentPage - 1) * AllSportsQueryModel.SportsPerPage)
                 .Take(AllSportsQueryModel.SportsPerPage)
-                .ProjectTo<SportsListingViewModel>(mapper.ConfigurationProvider)
+                .ProjectTo<SportListingViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             return sports;
@@ -65,7 +65,7 @@
             context.SaveChanges();
         }
 
-        public void Create(SportsFormModel model)
+        public void Create(SportFormModel model)
         {
             var sport = mapper.Map<Sport>(model);
 
@@ -86,7 +86,7 @@
             context.SaveChanges();
         }
 
-        public bool Edit(int id, SportsFormModel model)
+        public bool Edit(int id, SportFormModel model)
         {
             var sport = context.Sports
                 .Where(s => s.Id == id).FirstOrDefault();
@@ -106,17 +106,17 @@
             return true;
         }
 
-        public SportsFormModel EditConvert(SportsDetailsViewModel sport)
+        public SportFormModel EditConvert(SportDetailsViewModel sport)
         {
-            var model = mapper.Map<SportsFormModel>(sport);
+            var model = mapper.Map<SportFormModel>(sport);
 
             return model;
         }
 
-        public SportsDetailsViewModel GetSport(int id)
+        public SportDetailsViewModel GetSport(int id)
             => context.Sports
                 .Where(s => s.Id == id)
-                .ProjectTo<SportsDetailsViewModel>(mapper.ConfigurationProvider)
+                .ProjectTo<SportDetailsViewModel>(mapper.ConfigurationProvider)
                 .First();
 
         public int TotalSports()

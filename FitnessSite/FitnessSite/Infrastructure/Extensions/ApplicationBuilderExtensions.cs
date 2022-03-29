@@ -1,15 +1,13 @@
 ﻿namespace FitnessSite.Infrastructure.Extensions
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
     using FitnessSite.Data;
     using FitnessSite.Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-
+    using System;
+    using System.Threading.Tasks;
     using static FitnessSite.Areas.Admin.AdminConstants;
 
     public static class ApplicationBuilderExtensions

@@ -1,15 +1,12 @@
 ﻿namespace FitnessSite.Test.Controllers
 {
-    using Xunit;
-    using MyTested.AspNetCore.Mvc;
     using FitnessSite.Controllers;
     using FitnessSite.Models.Trainers;
-    using FitnessSite.Data.Models;
+    using MyTested.AspNetCore.Mvc;
     using System.Linq;
-
-    using static Data.Trainers;
+    using Xunit;
     using static Data.Sports;
-
+    using static Data.Trainers;
     using static WebConstants;
 
     public class TrainersControllerTest
@@ -19,7 +16,7 @@
             => MyController<TrainersController>
                 .Instance(controller => controller
                     .WithData(TenPublicTrainers))
-                .Calling(c => c.All(GetQuery()))
+                .Calling(c => c.All(Data.Trainers.GetQuery))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AllTrainersQueryModel>());
@@ -55,7 +52,7 @@
             => MyController<TrainersController>
                 .Instance(controller => controller
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Become(new BecomeTrainerFormModel
                 {
@@ -72,7 +69,7 @@
                     .RestrictingForAuthorizedRequests())
                 .ValidModelState()
                 .Data(data => data
-                    .WithSet<Trainer>(trainers => trainers
+                    .WithSet<FitnessSite.Data.Models.Trainer>(trainers => trainers
                         .Any(t =>
                             t.FullName == fullName &&
                             t.Email == email &&
@@ -104,7 +101,7 @@
             => MyController<TrainersController>
                 .Instance(controller => controller
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Become(new BecomeTrainerFormModel
                 {
@@ -142,8 +139,8 @@
             => MyController<TrainersController>
                 .Instance(controller => controller
                     .WithData(TenPublicSports)
-                    .WithData(Trainer())
-                    .WithData(User())
+                    .WithData(Trainer)
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Become(new BecomeTrainerFormModel
                 {
@@ -168,7 +165,7 @@
         public void DetailsShouldReturnView()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer()))
+                    .WithData(Trainer))
                 .Calling(c => c.Details(1, $"Pavel Timenov-{Sport()}"))
                 .ShouldReturn()
                 .View(view => view
@@ -178,7 +175,7 @@
         public void DetailsShouldReturnBadRequestWhenInformationIsInvalid()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer()))
+                    .WithData(Trainer))
                 .Calling(c => c.Details(1, $"Pavel-{Sport()}"))
                 .ShouldReturn()
                 .BadRequest();
@@ -187,9 +184,9 @@
         public void GetEditShouldBeAuthorizedAndReturnView()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Edit(1))
                 .ShouldHave()
@@ -203,9 +200,9 @@
         public void GetEditShouldBeAuthorizedAndReturnBadRequestWhenUserIsNotTrainerOrAdmin()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(SecondTrainer())
+                    .WithData(SecondTrainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Edit(2))
                 .ShouldHave()
@@ -233,9 +230,9 @@
             int sportId)
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Edit(id, new BecomeTrainerFormModel
                 {
@@ -276,9 +273,9 @@
             int sportId)
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Edit(id, new BecomeTrainerFormModel
                 {
@@ -317,9 +314,9 @@
             int sportId)
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.Edit(id, new BecomeTrainerFormModel
                 {
@@ -343,9 +340,9 @@
         public void DeleteShouldBeAuthorizedAndReturnRedirect()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                .Calling(c => c.Delete(1))
                .ShouldHave()
@@ -362,9 +359,9 @@
         public void DeleteShouldBeAuthorizedAndReturnBadRequestWhenUserIsNotTrainerOrAdmin()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(SecondTrainer())
+                    .WithData(SecondTrainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                .Calling(c => c.Delete(2))
                .ShouldHave()
@@ -378,9 +375,9 @@
         public void MyProfileShouldReturnView()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
+                    .WithData(User)
                     .WithUser())
                 .Calling(c => c.MyProfile())
                 .ShouldHave()
@@ -395,10 +392,10 @@
         public void HireShouldReturnRedirect()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(SecondTrainer())
+                    .WithData(SecondTrainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
-                    .WithData(SecondUser())
+                    .WithData(User)
+                    .WithData(SecondUser)
                     .WithUser())
                 .Calling(c => c.Hire(2))
                 .ShouldHave()
@@ -413,10 +410,10 @@
         public void HireShouldReturnBadRequestWhenUserIsCustomer()
             => MyController<TrainersController>
                 .Instance(controller => controller
-                    .WithData(Trainer())
+                    .WithData(Trainer)
                     .WithData(TenPublicSports)
-                    .WithData(User())
-                    .WithData(SecondUser())
+                    .WithData(User)
+                    .WithData(SecondUser)
                     .WithUser())
                 .Calling(c => c.Hire(1))
                 .ShouldHave()
@@ -425,98 +422,5 @@
                 .AndAlso()
                 .ShouldReturn()
                 .BadRequest();
-
-
-        private static AllTrainersQueryModel GetQuery()
-        {
-            AllTrainersQueryModel model = new AllTrainersQueryModel
-            {
-                SearchTerm = null,
-                Sport = null,
-                Sorting = TrainerSorting.DateCreated,
-                CurrentPage = 1
-            };
-
-            return model;
-        }
-
-        private static Trainer Trainer()
-        {
-            var trainer = new Trainer()
-            {
-                Id = 1,
-                FullName = "Pavel Timenov",
-                Email = "paveltimenov@abv.bg",
-                PhoneNumber = "514752368",
-                ImageUrl = "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
-                Description = "Hello. I am Pavel Timenov. Taekwondo black belt.",
-                SportId = 1,
-                Sport = new Sport
-                {
-                    Name = "Football",
-                    Origin = "England",
-                    Description = "The best game. It is the most played in the world."
-                },
-                UserId = "TestId",
-                IsPublic = true
-            };
-
-            return trainer;
-        }
-
-        private static Trainer SecondTrainer()
-        {
-            var trainer = new Trainer()
-            {
-                Id = 2,
-                FullName = "Timenov Pavel",
-                Email = "paveltimenov@gmail.bg",
-                PhoneNumber = "87452136586",
-                ImageUrl = "https://cdn.cnn.com/cnnnext/dam/assets/211020105902-01-conor-mcgregor-july21-large-169.jpg",
-                Description = "Hello. I am Timenov Pavel. Taekwondo black belt.",
-                SportId = 1,
-                Sport = new Sport
-                {
-                    Name = "Football",
-                    Origin = "England",
-                    Description = "The best game. It is the most played in the world."
-                },
-                UserId = "SecondId",
-                IsPublic = true
-            };
-
-            return trainer;
-        }
-
-        private static string Sport()
-        {
-            var trainer = Trainer();
-
-            var sport = trainer.Sport.Name;
-
-            return sport;
-        }
-
-        private static User User()
-        {
-            var user = new User
-            {
-                Id = "TestId",
-                UserName = "TestUser",               
-            };
-
-            return user;
-        }
-
-        private static User SecondUser()
-        {
-            var user = new User
-            {
-                Id = "SecondId",
-                UserName = "SecondUserName",
-            };
-
-            return user;
-        }
     }
 }

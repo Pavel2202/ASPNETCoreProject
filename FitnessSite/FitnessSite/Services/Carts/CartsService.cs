@@ -54,7 +54,7 @@
             context.SaveChanges();
         }
 
-        public IEnumerable<ProductsViewModel> Products(string userId)
+        public IEnumerable<ProductViewModel> Products(string userId)
         {
             var user = context.Users
                 .FirstOrDefault(u => u.Id == userId);
@@ -63,7 +63,7 @@
 
             var products = context.Products
                 .Where(p => p.CartId == cartId)
-                .ProjectTo<ProductsViewModel>(mapper.ConfigurationProvider)
+                .ProjectTo<ProductViewModel>(mapper.ConfigurationProvider)
                 .ToList();
 
             return products;

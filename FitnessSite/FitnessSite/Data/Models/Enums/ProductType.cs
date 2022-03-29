@@ -1,4 +1,4 @@
-﻿namespace FitnessSite.Data.Models
+﻿namespace FitnessSite.Data.Models.Enums
 {
     public enum ProductType
     {

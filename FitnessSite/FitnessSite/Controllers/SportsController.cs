@@ -6,9 +6,8 @@
     using FitnessSite.Services.Sports;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using static WebConstants;
     using static Areas.Admin.AdminConstants;
+    using static WebConstants;
 
     public class SportsController : Controller
     {
@@ -46,7 +45,7 @@
 
         [HttpPost]
         [Authorize(Roles = AdministratorRoleName)]
-        public IActionResult Add(SportsFormModel model)
+        public IActionResult Add(SportFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +83,7 @@
 
         [HttpPost]
         [Authorize(Roles = AdministratorRoleName)]
-        public IActionResult Edit(int id, SportsFormModel model)
+        public IActionResult Edit(int id, SportFormModel model)
         {
             if (!ModelState.IsValid)
             {

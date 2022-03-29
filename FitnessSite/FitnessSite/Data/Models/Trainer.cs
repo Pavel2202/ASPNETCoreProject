@@ -9,7 +9,7 @@
     {
         public Trainer()
         {
-            this.Customers = new HashSet<User>();
+            this.Customers = new List<User>();
         }
 
         [Key]

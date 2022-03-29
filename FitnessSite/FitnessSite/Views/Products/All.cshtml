@@ -41,6 +41,11 @@
     </div>
 </form>
 
+@if (!Model.Products.Any())
+{
+    <h2 class="text-center">No products found!</h2>
+}
+
 <div class="row">
 @foreach (var product in Model.Products)
 {
@@ -58,7 +63,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Products" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-primary">Add to Cart</a>
+                        <a asp-controller="Products" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-info">Add to Cart</a>
                     }
                 </div>
         </div>
