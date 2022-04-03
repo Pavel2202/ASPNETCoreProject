@@ -1,5 +1,5 @@
-# ASPNETCoreProject
-This is my SoftUni project using ASPNETCore
+# ASP.NETCoreProject
+This is my SoftUni project using ASP.NETCore
 
 The project allows you to buy products(supplements and equipment), add recipes, seach for a recipe, become a trainer, hire a trainer and learn about different sports.
 
@@ -33,3 +33,29 @@ What I used:
 - Testing
     - xUnit
     - MyTested.AspNetCore.Mvc - by Ivaylo Kenov
+
+## Preview:
+
+### Database schema
+![Database](https://i.imgur.com/8dCFPeU.png)
+
+### Home Page
+![Home](https://i.imgur.com/k5PaL2K.png)
+
+### Products Page
+![Products](https://i.imgur.com/BcVzfwu.png)
+
+### MyCart Page
+![MyCart Page](https://i.imgur.com/RibUccr.png)
+
+### Recipes Page
+![Recipes Pages](https://i.imgur.com/vc8eGdj.png)
+
+### Trainers Page
+![Trainers Pages](https://i.imgur.com/6c4qXML.png)
+
+### Sports Page
+![Sports Pages](https://i.imgur.com/G8knSP1.png)
+
+### Admin Page
+![About](https://i.imgur.com/zkIB92r.png)
