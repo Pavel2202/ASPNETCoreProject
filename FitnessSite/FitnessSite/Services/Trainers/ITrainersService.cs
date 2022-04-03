@@ -19,6 +19,8 @@
 
         int TotalTrainers();
 
+        int TotalTrainersAdminArea();
+
         TrainerDetailsViewModel GetTrainer(int id);
 
         bool Hire(int trainerId, string userId);

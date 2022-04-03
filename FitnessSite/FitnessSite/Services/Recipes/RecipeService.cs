@@ -157,6 +157,9 @@
             .Count();
 
         public int TotalRecipes()
+            => context.Recipes.Where(r => r.IsPublic).Count();
+
+        public int TotalRecipesAdminArea()
             => context.Recipes.Count();
 
     }

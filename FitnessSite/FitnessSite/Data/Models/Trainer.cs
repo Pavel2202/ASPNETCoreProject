@@ -41,7 +41,6 @@
         [Required]
         public Sport Sport { get; set; }
 
-        [Required]
         public string UserId { get; set; }
 
         public ICollection<User> Customers { get; set; }

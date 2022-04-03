@@ -120,6 +120,9 @@
                 .First();
 
         public int TotalSports()
+            => context.Sports.Where(s => s.IsPublic).Count();
+
+        public int TotalSportsAdminArea()
             => context.Sports.Count();
     }
 }

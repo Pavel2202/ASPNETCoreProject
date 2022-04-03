@@ -34,7 +34,7 @@
             bool isPublic = true)
         {
             var trainersQuery = context.Trainers
-                .Where(t => !isPublic || t.IsPublic)
+                .Where(t => (!isPublic || t.IsPublic) && t.UserId != null)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(sport))
@@ -110,9 +110,9 @@
             var user = context.Users
                 .FirstOrDefault(u => u.Id == trainer.UserId);
 
-            context.Trainers.Remove(trainer);
-
             user.TrainerId = null;
+
+            trainer.UserId = null;
 
             context.SaveChanges();
         }
@@ -220,6 +220,9 @@
         }
 
         public int TotalTrainers()
-            => context.Trainers.Count();
+            => context.Trainers.Where(t => t.UserId != null && t.IsPublic).Count();
+
+        public int TotalTrainersAdminArea()
+            => context.Trainers.Where(t => t.UserId != null).Count();
     }
 }

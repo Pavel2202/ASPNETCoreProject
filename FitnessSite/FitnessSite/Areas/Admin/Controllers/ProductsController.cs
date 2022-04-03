@@ -15,7 +15,7 @@
 
         public IActionResult All(string currentPage)
         {
-            var totalProducts = service.TotalProducts();
+            var totalProducts = service.TotalProductsAdminArea();
 
             int page = 1;
 

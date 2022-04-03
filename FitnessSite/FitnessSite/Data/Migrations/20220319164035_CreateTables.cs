@@ -157,7 +157,7 @@ namespace FitnessSite.Data.Migrations
                         column: x => x.TrainerId,
                         principalTable: "Trainers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

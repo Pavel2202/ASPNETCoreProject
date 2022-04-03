@@ -16,6 +16,8 @@
 
         int TotalProducts();
 
+        int TotalProductsAdminArea();
+
         IEnumerable<string> AllTypes();
 
         ProductDetailsViewModel GetProduct(int id);

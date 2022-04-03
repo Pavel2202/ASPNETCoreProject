@@ -13,6 +13,8 @@
 
         int TotalSports();
 
+        int TotalSportsAdminArea();
+
         void Create(SportFormModel model);
 
         SportDetailsViewModel GetSport(int id);

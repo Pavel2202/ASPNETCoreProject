@@ -18,6 +18,8 @@
 
         int TotalRecipes();
 
+        int TotalRecipesAdminArea();
+
         RecipeDetailsViewModel GetRecipe(int recipeId);
 
         IEnumerable<RecipeListingViewModel> MyRecipes(string userId);

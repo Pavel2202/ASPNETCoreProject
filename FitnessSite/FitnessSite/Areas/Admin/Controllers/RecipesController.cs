@@ -15,7 +15,7 @@
 
         public IActionResult All(string currentPage)
         {
-            var totalRecipes = service.TotalRecipes();
+            var totalRecipes = service.TotalRecipesAdminArea();
 
             int page = 1;
 

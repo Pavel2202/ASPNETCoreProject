@@ -15,7 +15,7 @@
 
         public IActionResult All(string currentPage)
         {
-            var totalSports = service.TotalSports();
+            var totalSports = service.TotalSportsAdminArea();
 
             int page = 1;
 

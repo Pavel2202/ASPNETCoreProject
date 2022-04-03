@@ -178,6 +178,9 @@
                 .First();
 
         public int TotalProducts()
+            => context.Products.Where(p => p.IsPublic).Count();
+
+        public int TotalProductsAdminArea()
             => context.Products.Count();
     }
 }

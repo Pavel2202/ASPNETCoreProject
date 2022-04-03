@@ -38,6 +38,11 @@
 
             var productIndex = random.Next(0, allProducts.Count);
 
+            if (allProducts.Count == 0)
+            {
+                return null;
+            }
+
             var product = allProducts[productIndex];
 
             return product;
@@ -53,6 +58,11 @@
             Random random = new Random();
 
             var recipeIndex = random.Next(0, allRecipes.Count);
+
+            if (allRecipes.Count == 0)
+            {
+                return null;
+            }
 
             var recipe = allRecipes[recipeIndex];
 
