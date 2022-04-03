@@ -55,10 +55,10 @@
                 .Calling(c => c.Index())
                 .ShouldHave()
                 .MemoryCache(cache => cache
-                    .ContainingEntryWithKey(BestTrainerCacheKey));
+                    .ContainingEntryWithKey(BestTrainerCacheKey));       
 
         [Fact]
-        public void IndexShouldReturnView()
+        public void IndexShouldReturnViewWhenNoData()
             => MyController<HomeController>
             .Instance(controller => controller
                 .WithData(TenPublicProducts)
@@ -67,7 +67,7 @@
             .Calling(c => c.Index())
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<IndexDisplayViewModel>());
+                .WithName("IndexWithoutData"));
 
         [Fact]
         public void ErrorShouldReturnView()

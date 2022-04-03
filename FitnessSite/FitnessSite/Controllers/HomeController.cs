@@ -61,7 +61,12 @@
                 Trainer = trainer
             };
 
-            return View(model);
+            if (model.Recipe == null || model.Product == null || model.Trainer == null)
+            {
+                return this.View("IndexWithoutData");
+            }
+
+            return this.View(model);
         }
 
         public IActionResult Error()
