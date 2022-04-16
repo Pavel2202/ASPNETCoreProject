@@ -28,7 +28,7 @@
 
         bool Edit(int id, RecipeFormModel model);
 
-        RecipeFormModel EditConvert(RecipeDetailsViewModel recipe);
+        RecipeFormModel ConvertToFormModel(RecipeDetailsViewModel recipe);
 
         void Delete(int recipeId);
 

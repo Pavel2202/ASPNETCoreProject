@@ -158,7 +158,7 @@
             return true;
         }
 
-        public ProductFormModel EditConvert(ProductDetailsViewModel product)
+        public ProductFormModel ConvertToFormModel(ProductDetailsViewModel product)
         {
             var type = context.Products
                 .Where(t => t.Name == product.Name)

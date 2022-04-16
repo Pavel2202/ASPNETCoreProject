@@ -139,7 +139,7 @@
             return true;
         }
 
-        public BecomeTrainerFormModel EditConvert(int id)
+        public BecomeTrainerFormModel ConvertToFormModel(int id)
         {
             var trainer = context.Trainers
                 .FirstOrDefault(t => t.Id == id);

@@ -19,7 +19,7 @@
 
         SportDetailsViewModel GetSport(int id);
 
-        SportFormModel EditConvert(SportDetailsViewModel sport);
+        SportFormModel ConvertToFormModel(SportDetailsViewModel sport);
 
         bool Edit(int id, SportFormModel model);
 

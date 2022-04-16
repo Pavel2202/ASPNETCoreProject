@@ -87,7 +87,7 @@
 
             var recipe = service.GetRecipe(id);
 
-            var model = service.EditConvert(recipe);
+            var model = service.ConvertToFormModel(recipe);
 
             return this.View(model);
         }

@@ -80,7 +80,7 @@
         {
             var product = service.GetProduct(id);
 
-            var model = service.EditConvert(product);
+            var model = service.ConvertToFormModel(product);
 
             return this.View(model);
         }

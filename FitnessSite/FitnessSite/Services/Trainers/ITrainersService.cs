@@ -31,7 +31,7 @@
 
         bool Edit(int id, BecomeTrainerFormModel model);
 
-        BecomeTrainerFormModel EditConvert(int id);
+        BecomeTrainerFormModel ConvertToFormModel(int id);
 
         void Delete(int id);
 

@@ -22,7 +22,7 @@
 
         ProductDetailsViewModel GetProduct(int id);
 
-        ProductFormModel EditConvert(ProductDetailsViewModel product);
+        ProductFormModel ConvertToFormModel(ProductDetailsViewModel product);
 
         bool Edit(int id, ProductFormModel model);
 

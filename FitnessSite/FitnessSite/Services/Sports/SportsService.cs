@@ -106,7 +106,7 @@
             return true;
         }
 
-        public SportFormModel EditConvert(SportDetailsViewModel sport)
+        public SportFormModel ConvertToFormModel(SportDetailsViewModel sport)
         {
             var model = mapper.Map<SportFormModel>(sport);
 

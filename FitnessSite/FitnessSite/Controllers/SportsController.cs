@@ -76,7 +76,7 @@
         {
             var sport = service.GetSport(id);
 
-            var model = service.EditConvert(sport);
+            var model = service.ConvertToFormModel(sport);
 
             return this.View(model);
         }

@@ -110,7 +110,7 @@
             return true;
         }
 
-        public RecipeFormModel EditConvert(RecipeDetailsViewModel recipe)
+        public RecipeFormModel ConvertToFormModel(RecipeDetailsViewModel recipe)
         {
             var model = mapper.Map<RecipeFormModel>(recipe);
 

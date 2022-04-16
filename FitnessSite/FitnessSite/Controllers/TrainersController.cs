@@ -94,7 +94,7 @@
                 return BadRequest();
             }
 
-            var trainer = service.EditConvert(id);
+            var trainer = service.ConvertToFormModel(id);
 
             trainer.Sports = service.AllSports();
 
